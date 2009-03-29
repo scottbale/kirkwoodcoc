@@ -16,7 +16,7 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', 'wordpress');
+define('DB_NAME', 'kirkwoodcoc');
 
 /** MySQL database username */
 define('DB_USER', 'wp');
@@ -41,10 +41,10 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-define('AUTH_KEY', 'Inky Dinky Doodle');
-define('SECURE_AUTH_KEY', ' 23 aardvarks.');
-define('LOGGED_IN_KEY', ' dead hippo carcas.');
-define('NONCE_KEY', 'The quick brown foxes jumped over the flaming lava.');
+define('AUTH_KEY',        'EFaTeHx_;|SM]S(IEV$!IY{Yo/<Jly+BY-]#Yc-PH@u;$6SBRDw+FCz~8yA6TjO7');
+define('SECURE_AUTH_KEY', 'G=YAW.uC0r@P<V.]`N5|+rSzH|&IZtkkETP+@}-H-y~UM:L|8a}o**SRFxb2>> #');
+define('LOGGED_IN_KEY',   'A$uI=uOT=3JL~;@zjIG6()Abwb8J)+6k}o$+%YE>bzKmb)A_-.6,]tQ,fg{[~nsQ');
+define('NONCE_KEY',       '-<o*}&~s9Jh/r{1<%:K~NbG-J^sQ*GPcMa2(jud<<-@iOf6GRvJcPUQrI+iCj9uv');
 /**#@-*/
 
 /**
@@ -53,7 +53,7 @@ define('NONCE_KEY', 'The quick brown foxes jumped over the flaming lava.');
  * You can have multiple installations in one database if you give each a unique
  * prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix  = 'wptest_';
+$table_prefix  = 'kwcoc_';
  
 
 /**

@@ -5,15 +5,15 @@
 
 		<?php while (have_posts()) : the_post(); ?>
 		
-		<?php if ( in_category('4') ) : ?>
-			<div class="audioBanner">
-				<div class="post">
-					<div class="headline">
+		<?php if ( in_category('3') ) : ?>
+			<div class="post">
+				<div class="audio">
+					<div class="audioline">
 					<h1><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h1>
-					<h3>Download the <a href="<?php echo get_post_meta( get_the_ID(), 'URL', true) ?>">Sermon audio</a></h3>
+					Download the <a href="<?php echo get_post_meta( get_the_ID(), 'URL', true) ?>">Sermon audio</a>
 					</div>
 
-				<small><b>Recorded:</b> <?php echo get_post_meta( get_the_ID(), 'dateRecorded', true); ?> | <b>Speaker:</b> <?php echo get_post_meta( get_the_ID(), 'preacher', true); ?> <?php if ( $user_ID ) : 
+				<small><b>Recorded:</b> <?php echo get_post_meta( get_the_ID(), 'dateRecorded', true); ?> | <b>Speaker:</b> <?php echo get_post_meta( get_the_ID(), 'speaker', true); ?> <?php if ( $user_ID ) : 
 				?> | <b>Modify:</b> <?php edit_post_link(); ?> <?php endif; ?></small>
 				 <hr/>
 

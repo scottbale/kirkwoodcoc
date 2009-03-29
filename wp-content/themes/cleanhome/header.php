@@ -16,13 +16,21 @@
 
 </head>
 
+
+
 <body>
+
+
 
 <div id="wrapper">
 
+
+
 	<div id="header">
+
 		<div id="logo">
 		<h1>
+
 		<a href="<?php echo get_option('home'); ?>">
 		<?php bloginfo('name'); ?></a>
 		</h1>
@@ -30,24 +38,32 @@
 		<h2><?php bloginfo('description'); ?></h2>
 		
 		</div>
+
 		<div id="nav">
 		<?php if ( !function_exists('dynamic_sidebar')
         || !dynamic_sidebar('Top Navigation') ) : ?>
+
 			<ul>
+
 				<?php wp_list_pages('title_li='); ?>
+
 				<li>
-				<a title="Listen to Sermons" href="?cat=4">Sermon Audio</a>
+				<a title="Listen to Sermons" href="?cat=3">Sermon Audio</a>
 				</li>
 				<li>
-				<a title="Bulletin Articles" href="?cat=3">Articles</a>
+				<a title="Bulletin Articles" href="?cat=4">Articles</a>
 				</li>
 				<li>
 				<a title="News and Updates" href="?cat=5">News</a>
 				</li>
 			</ul>
 		<?php endif; ?>
+
 		</div>
+
 	</div>
 	
+
+
 
 

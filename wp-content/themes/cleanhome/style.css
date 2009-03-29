@@ -98,23 +98,31 @@ border-bottom:none;
 #nav li a:hover {
 background-color:#f7f7f7;
 }
-.audioBanner {
+.audio {
 background-image: url(images/s_audio_icon.jpg);
 background-repeat: no-repeat;
 font-family:Georgia;
 height:auto;
-border-bottom:1px dotted #ccc;
 width:100%;
 float:left;
 padding:15px 0;
 line-height:120%;
 }
-.audioBanner div.headline {
+.audio div.audioline {
 margin-left: 65px;
 font-size:20px;
+padding:0px 12px 12px;
+}
+.audio div.audioline h1 {
+margin: 0px 0px 10px;
+}
+.banner {
+border-bottom:1px dotted #ccc;
+}
+.banner div.audioline {
 padding:12px;
 }
-.audioBanner div.headline:hover {
+.banner div.audioline:hover {
 background-color:#f7f7f7;
 }
 #blurb {

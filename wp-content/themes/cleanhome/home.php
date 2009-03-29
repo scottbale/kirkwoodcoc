@@ -1,19 +1,18 @@
 <?php get_header(); ?>
 
-	<div class="audioBanner">
+	<div class="audio banner">
 
         
 		<?php if (have_posts()) : ?>
 			<?php $count = 0; ?>
 			
 			<?php while (have_posts() && $count<2) : the_post(); ?>
-				<?php $count++; ?>
 				
+				<?php if ( in_category('3') ) : ?>
+					<?php $count++; ?>
 			
-				<?php if ( in_category('4') ) : ?>
-			
-					<div class="headline">
-						<?php echo get_post_meta( get_the_ID(), 'preacher', true); ?>:
+					<div class="audioline">
+						<?php echo get_post_meta( get_the_ID(), 'speaker', true); ?>:
 						<a href="<?php the_permalink() ?>"><?php the_title(); ?></a> -
 						<?php echo get_post_meta( get_the_ID(), 'dateRecorded', true); ?>
 					</div>
@@ -30,8 +29,11 @@
 
 	<div id="content">
 	<img class="home" src="<?php bloginfo('stylesheet_directory'); ?>/images/bldgSmall.jpg"
+
 	</div>
+
 	
+
 <?php get_sidebar(); ?>
 
 <?php get_footer(); ?>
