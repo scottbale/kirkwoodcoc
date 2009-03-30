@@ -7,7 +7,21 @@
 			<ul>
 				<li><a href="mailto:<?php bloginfo('admin_email'); ?>">Email: <b> <?php bloginfo('admin_email'); ?> </b></a></li>
 				<li class="nolink">Phone: <b>(314) 821-4910</b></li>
+				<li><a href=http://maps.google.com/maps?ie=UTF8&hl=en&cid=4773445581001786915&ll=38.571413,-90.414906&spn=0.009982,0.022745&z=16&iwloc=A" target="_google">Address: <b> 928 Geyer Road </b></a></li>
 			</ul>
+		</div>
+
+		<div class="block">
+			<h3>Subscribe</h3>
+				<ul>
+					<?php $url = get_bloginfo("wpurl"); ?>
+					<?php $itunesurl = str_replace('http', 'itpc', $url); ?>
+					<li><a title="Subscripe to all updates"       href="<?php bloginfo('rss2_url'); ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-14x14.png" /> All updates</a></li>
+					<li><a title="Subscripe to News"                      href="<?php $url; ?>/category/news/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-14x14.png" /> News</a></li>
+					<li><a title="Subscripe to Articles"                  href="<?php $url; ?>/category/article/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-14x14.png" /> Articles</a></li>
+					<li><a title="Subscripe to Sermons podcast"           href="<?php $url; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-14x14.png" /> Sermons</a></li>
+					<li><a title="Subscripe to Sermons podcast in iTunes" href="<?php echo $itunesurl; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/iTunes.jpg" /> Sermons (iTunes)</a></li>
+				</ul>
 		</div>
 
 		<div class="block">
@@ -32,7 +46,6 @@
 				<ul>
 					<?php wp_register(); ?>
 					<li><?php wp_loginout(); ?></li>
-					<li><a href="<?php bloginfo('rss2_url'); ?>">RSS</a></li>
 					<?php wp_meta(); ?>
 				</ul>
 		</div>

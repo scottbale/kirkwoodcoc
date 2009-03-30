@@ -3,6 +3,9 @@
 	<div id="content">
 	<?php if (have_posts()) : ?>
 
+		<?php $url = get_bloginfo("wpurl"); ?>
+		<?php $itunesurl = str_replace('http', 'itpc', $url); ?>
+
 		<?php while (have_posts()) : the_post(); ?>
 		
 		<?php if ( in_category('3') ) : ?>
@@ -10,11 +13,14 @@
 				<div class="audio">
 					<div class="audioline">
 					<h1><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h1>
-					Download the <a href="<?php echo get_post_meta( get_the_ID(), 'URL', true) ?>">Sermon audio</a>
+					Download the <a title="Sermon audio mp3 file" href="<?php echo get_post_meta( get_the_ID(), 'URL', true) ?>">Sermon audio</a>
 					</div>
 
-				<small><b>Recorded:</b> <?php echo get_post_meta( get_the_ID(), 'dateRecorded', true); ?> | <b>Speaker:</b> <?php echo get_post_meta( get_the_ID(), 'speaker', true); ?> <?php if ( $user_ID ) : 
-				?> | <b>Modify:</b> <?php edit_post_link(); ?> <?php endif; ?></small>
+				<small><b>Recorded:</b> <?php echo get_post_meta( get_the_ID(), 'dateRecorded', true); ?> | <b>Speaker:</b> <?php echo get_post_meta( get_the_ID(), 'speaker', true); ?> 
+				| <a title="Subscripe to sermons" href="<?php $url; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-14x14.png" /> Subscribe</a>
+				| <a title="Subscripe to sermons in iTunes" href="<?php echo $itunesurl; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/iTunes.jpg" /> iTunes</a>
+				<?php if ( $user_ID ) : ?> | <b>Modify:</b> <?php edit_post_link(); ?> <?php endif; ?>
+				</small>
 				 <hr/>
 
 				</div>		
@@ -22,8 +28,9 @@
 		<?php else : ?>
 			<div class="post">
 				<h1><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h1>
-				<small><b>Posted:</b> <?php the_time('F jS, Y') ?> | <b>Author:</b> <?php the_author_posts_link(); ?> | <b>Filed under:</b> <?php the_category(', ') ?> <?php the_tags(' | <b>Tags:</b> ', ', ', ''); ?> <?php if ( $user_ID ) : 
-				?> | <b>Modify:</b> <?php edit_post_link(); ?> <?php endif; ?></small>
+				<small><b>Posted:</b> <?php the_time('F jS, Y') ?> | <b>Author:</b> <?php the_author_posts_link(); ?> | <b>Filed under:</b> <?php the_category(', ') ?> <?php the_tags(' | <b>Tags:</b> ', ', ', ''); ?> 
+		        <?php if ( $user_ID ) : ?> | <b>Modify:</b> <?php edit_post_link(); ?> <?php endif; ?>
+		        </small>
 				<?php the_content('Read the rest of this entry &raquo;'); ?>
 				 <hr/>
 			</div>

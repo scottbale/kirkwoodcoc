@@ -13,7 +13,7 @@
 			
 					<div class="audioline">
 						<?php echo get_post_meta( get_the_ID(), 'speaker', true); ?>:
-						<a href="<?php the_permalink() ?>"><?php the_title(); ?></a> -
+						<a title="Download the sermon audio" href="<?php the_permalink() ?>"><?php the_title(); ?></a> -
 						<?php echo get_post_meta( get_the_ID(), 'dateRecorded', true); ?>
 					</div>
 					

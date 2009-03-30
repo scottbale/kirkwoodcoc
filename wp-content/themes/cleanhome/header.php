@@ -10,6 +10,10 @@
 <link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>" type="text/css" media="screen" />
 <!--[if IE]><link rel="stylesheet" href="<?php bloginfo('stylesheet_directory'); ?>/ie.css" type="text/css" media="screen" /><![endif]-->
 <link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="<?php bloginfo('rss2_url'); ?>" />
+<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> Atom Feed" href="<?php bloginfo('atom_url'); ?>" />
+<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> Sermons" href="<?php bloginfo('wpurl'); ?>/category/sermon/feed" />
+<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> Articles" href="<?php bloginfo('wpurl'); ?>/category/article/feed" />
+<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> News" href="<?php bloginfo('wpurl'); ?>/category/news/feed" />
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 
 <?php wp_head(); ?>
@@ -48,13 +52,13 @@
 				<?php wp_list_pages('title_li='); ?>
 
 				<li>
-				<a title="Listen to Sermons" href="?cat=3">Sermon Audio</a>
+				<a title="Listen to Sermons" href="<?php bloginfo("wpurl");?>/category/sermon">Sermon Audio</a>
 				</li>
 				<li>
-				<a title="Bulletin Articles" href="?cat=4">Articles</a>
+				<a title="Bulletin Articles" href="<?php bloginfo("wpurl");?>/category/article">Articles</a>
 				</li>
 				<li>
-				<a title="News and Updates" href="?cat=5">News</a>
+				<a title="News and Updates" href="<?php bloginfo("wpurl");?>/category/news">News</a>
 				</li>
 			</ul>
 		<?php endif; ?>
