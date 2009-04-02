@@ -12,7 +12,7 @@
 		</div>
 
 		<div class="block">
-			<h3>Recent Posts</h3>
+			<h3>Recent</h3>
 				<?php query_posts('showposts=5'); ?>
 				<ul>
 					<?php while (have_posts()) : the_post(); ?>
