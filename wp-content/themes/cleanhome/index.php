@@ -13,12 +13,12 @@
 				<div class="audio">
 					<div class="audioline">
 					<h1><a href="<?php the_permalink() ?>"><?php the_title(); ?></a></h1>
-					Download the <a title="Sermon audio mp3 file" href="<?php echo get_post_meta( get_the_ID(), 'URL', true) ?>">Sermon audio</a>
 					</div>
 
 				<small><b>Recorded:</b> <?php echo get_post_meta( get_the_ID(), 'dateRecorded', true); ?> | <b>Speaker:</b> <?php echo get_post_meta( get_the_ID(), 'speaker', true); ?> 
-				| <a title="Subscripe to sermons" href="<?php $url; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-14x14.png" /> Subscribe</a>
-				| <a title="Subscripe to sermons in iTunes" href="<?php echo $itunesurl; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/iTunes.jpg" /> iTunes</a>
+				| <a title="Download mp3 file" href="<?php echo get_post_meta( get_the_ID(), 'URL', true) ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/audio-icon-s.png" /> Download</a>
+				| <a title="Subscripe to sermons" href="<?php $url; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-28x28.png" /> Subscribe</a>
+				| <a title="Subscripe to sermons in iTunes" href="<?php echo $itunesurl; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/podcast_icon_30.jpg" /> iTunes</a>
 				<?php if ( $user_ID ) : ?> | <b>Modify:</b> <?php edit_post_link(); ?> <?php endif; ?>
 				</small>
 				 <hr/>
