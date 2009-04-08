@@ -28,7 +28,7 @@
 	</div>
 
 	<div id="content">
-	<img class="home" src="<?php bloginfo('stylesheet_directory'); ?>/images/bldgSmall.jpg"
+	<img class="home" src="<?php bloginfo('stylesheet_directory'); ?>/images/bldgSmall.jpg" />
 
 	</div>
 

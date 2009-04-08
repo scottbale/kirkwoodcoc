@@ -17,5 +17,12 @@ padding:35px 0 50px;
 _margin:0;
 }
 #sidebar {
-_margin:0;
+MARGIN: 0px;
+width: 220px;
+}
+#footer {
+float: none;
+}
+#sidebar .block li a, #sidebar .block li.nolink {
+display:inline;
 }
