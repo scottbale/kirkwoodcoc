@@ -98,32 +98,33 @@ border-bottom:none;
 #nav li a:hover {
 background-color:#f7f7f7;
 }
-.audio {
+.audiobanner {
 background-image: url(images/s_audio_icon.jpg);
 background-repeat: no-repeat;
+}
+.banner {
 font-family:Georgia;
 height:auto;
 width:100%;
 float:left;
-padding:15px 0;
+padding:2px;
 line-height:120%;
 }
-.audio div.audioline {
+.audiobanner div.bannerline {
 margin-left: 65px;
+}
+.banner div.bannerline {
 font-size:20px;
-padding:0px 12px 12px;
-}
-.audio div.audioline h1 {
-margin: 0px 0px 10px;
-}
-.banner {
-border-bottom:1px dotted #ccc;
-}
-.banner div.audioline {
 padding:12px;
 }
-.banner div.audioline:hover {
+.banner div.bannerline h1 {
+margin: 0px 0px 10px;
+}
+.banner div.bannerline:hover {
 background-color:#f7f7f7;
+}
+.bottomborder {
+border-bottom:1px dotted #ccc;
 }
 #blurb {
 font-family:Georgia;
