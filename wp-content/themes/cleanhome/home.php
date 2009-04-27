@@ -1,8 +1,16 @@
 <?php get_header(); ?>
+        
+    <!--  example: put gospel meeting banners in text widget of blurb dynamic sidebar -->
+	<?php if ( function_exists('dynamic_sidebar')  && is_dynamic_sidebar('Blurb') ) : ?>
 
-	<div class="banner">
-        <div class="bannerline">Please join us for our <a href="/2009/04/15/news/gospel-meeting-april-19-24/">Spring 2008 Gospel Meeting</a> April 19-24</div>
-    </div>
+		<div class="banner">
+	        <div class="bannerline">
+	       		<?php dynamic_sidebar('Blurb') ?>
+	        </div>
+	    </div>
+
+	<?php endif; ?>
+		        
 
 	<div class="banner audiobanner bottomborder">
         
