@@ -32,7 +32,7 @@
 			<h3>Meta</h3>
 				<ul>
 					<?php wp_register(); ?>
-					<li><a title="Subscripe to RSS updates" href="<?php bloginfo('rss2_url'); ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-14x14.png" /> Subscribe</a></li>
+					<li><a title="Subscribe to RSS updates" href="<?php bloginfo('rss2_url'); ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-14x14.png" /> Subscribe</a></li>
 					<li><?php wp_loginout(); ?></li>
 					<?php wp_meta(); ?>
 				</ul>

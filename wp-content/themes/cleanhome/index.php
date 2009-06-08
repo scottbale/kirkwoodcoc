@@ -17,8 +17,8 @@
 
 				<small><b>Recorded:</b> <?php echo get_post_meta( get_the_ID(), 'dateRecorded', true); ?> | <b>Speaker:</b> <?php echo get_post_meta( get_the_ID(), 'speaker', true); ?> 
 				| <a title="Download mp3 file" href="<?php echo get_post_meta( get_the_ID(), 'URL', true) ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/audio-icon-s.png" /> Download</a>
-				| <a title="Subscripe to sermons" href="<?php $url; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-28x28.png" /> Subscribe</a>
-				| <a title="Subscripe to sermons in iTunes" href="<?php echo $itunesurl; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/podcast_icon_30.jpg" /> iTunes</a>
+				| <a title="Subscribe to sermons" href="<?php $url; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/feed-icon-28x28.png" /> Subscribe</a>
+				| <a title="Subscribe to sermons in iTunes" href="<?php echo $itunesurl; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/podcast_icon_30.jpg" /> iTunes</a>
 				<?php if ( $user_ID ) : ?> | <b>Modify:</b> <?php edit_post_link(); ?> <?php endif; ?>
 				</small>
 				 <hr/>
