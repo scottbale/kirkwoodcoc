@@ -7,7 +7,7 @@
 			<ul>
 				<li><a href="mailto:<?php bloginfo('admin_email'); ?>">Email: <b> <?php bloginfo('admin_email'); ?> </b></a></li>
 				<li class="nolink">Phone: <b>(314) 821-4910</b></li>
-				<li><a href=http://maps.google.com/maps?ie=UTF8&hl=en&cid=4773445581001786915&ll=38.571413,-90.414906&spn=0.009982,0.022745&z=16&iwloc=A" target="_google">Address: <b> 928 Geyer Road </b></a></li>
+				<li><a href=http://maps.google.com/maps?ie=UTF8&hl=en&cid=4773445581001786915&ll=38.571413,-90.414906&spn=0.009982,0.022745&z=16&iwloc=A" target="_google">Address: <b> 948 S. Geyer Road </b></a></li>
 			</ul>
 		</div>
 
