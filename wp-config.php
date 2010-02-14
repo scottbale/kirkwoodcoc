@@ -33,6 +33,10 @@ define('DB_CHARSET', 'utf8');
 /** The Database Collate type. Don't change this if in doubt. */
 define('DB_COLLATE', '');
 
+/** uncomment for localhost copy */
+//define('WP_HOME','http://kirkwoodcoc.localhost');
+//define('WP_SITEURL','http://kirkwoodcoc.localhost');
+
 /**#@+
  * Authentication Unique Keys.
  *
