@@ -23,9 +23,9 @@
 		
 		<div class="block">
 			<h3>Archives</h3>
-				<ul>
-				<?php wp_get_archives('type=monthly'); ?>
-				</ul>
+				<select name="archive-dropdown" onChange='document.location.href=this.options[this.selectedIndex].value;'>
+				<?php wp_get_archives('type=monthly&format=option'); ?>
+				</select>
 		</div>
 		
 		<div class="block">
