@@ -18,7 +18,7 @@
 
 
 				<small>
-				  <a title="Download mp3 file" href="<?php echo get_post_meta( get_the_ID(), 'URL', true) ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/down_alt.png" /> Download</a>
+				  <a title="Download mp3 file" href="<?php echo get_post_meta( get_the_ID(), 'URL', true) ?>">Download</a>
                 | <b>Recorded:</b> <?php echo get_post_meta( get_the_ID(), 'dateRecorded', true); ?>
                 | <b>Speaker:</b> <?php echo get_post_meta( get_the_ID(), 'speaker', true); ?> 
 				<?php if ( $user_ID ) : ?> | <b>Modify:</b> <?php edit_post_link(); ?> <?php endif; ?>
