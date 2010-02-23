@@ -49,16 +49,8 @@
 			<ul>
 
 				<?php wp_list_pages('title_li='); ?>
+                <?php wp_list_categories( 'orderby=id&order=ASC&title_li' ); ?>
 
-				<li>
-				<a title="Listen to Sermons" href="<?php bloginfo("wpurl");?>/category/sermon">Sermon Audio</a>
-				</li>
-				<li>
-				<a title="Bulletin Articles" href="<?php bloginfo("wpurl");?>/category/article">Articles</a>
-				</li>
-				<li>
-				<a title="News and Updates" href="<?php bloginfo("wpurl");?>/category/news">News</a>
-				</li>
 			</ul>
 		<?php endif; ?>
 
