@@ -48,7 +48,7 @@
 
 			<ul>
 
-				<?php wp_list_pages('title_li='); ?>
+				<?php wp_list_pages('title_li=&depth=1'); ?>
                 <?php wp_list_categories( 'orderby=id&order=ASC&title_li' ); ?>
 
 			</ul>
