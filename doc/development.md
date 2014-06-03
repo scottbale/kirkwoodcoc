@@ -25,15 +25,15 @@ For Developers/Maintainers
 For must up-to-date host provider settings see
 [settings](http://www.ipower.com/controlpanel/settings.bml).
 
-Current software stack
+Current software stack (5/24/14)
 -----------------------------------------------------------------------------------
 software            version used   description
 ------------------- -------------- ------------------------------------------------
 wordpress           2.9.1          blogging/website software
-mysql               5.0.91-log     embedded database that WordPress
+mysql               5.5.32         embedded database that WordPress
                                    uses to store content (pages,
                                    posts, accounts, etc.)
-php                 4.4.9          programming language that WordPress
+php                 5.2            programming language that WordPress
                                    is written in
 apache              ?.?            web server                                   
 Debian Linux        ?.?            host operating system
@@ -51,9 +51,6 @@ Debian Linux        ?.?            host operating system
     git tag -a -m "blah blah" 2.0.x
     git push --tags origin master
 
-
-# 
-
 \newpage
 
 Advanced - Running a local copy of the website
@@ -64,7 +61,45 @@ Advanced - Running a local copy of the website
 These are my notes from running my local copy of the website on my
 MacBook Pro running OSX 10.6 (Snow Leopard).
 
-### wp-config.php
+1. start mysql (via System Preferences mysql pane)
+1. start apache
+1. export mysql db from live website, import to local copy
+
+### php
+
+quick test
+
+    http://kirkwoodcoc.localhost/phptest.php
+    
+see
+    
+    /etc/php.ini[.default]
+    
+for verbose mysql errors, add the following to
+`wp-includes\wp-db.php`, function `__construct`, after `if (!$this->dbh) {`
+
+    echo(mysql_error());
+    
+upgrading:
+
+see
+
+    /usr/local/lib/php.ini
+    
+(mostly copied from my Mac OSX terminal window)
+
+    cd work/components/php-4.4.9/
+    ./configure --with-apxs2=/usr/local/apache2/bin/apxs --with-mysql
+    make
+    sudo make install
+    [edit php.ini-recommended]
+    [edit php.ini-dist]
+    sudo cp php.ini-dist /usr/local/lib/php.ini
+
+
+#### wp-config.php
+
+This is the PHP configuration file for the WordPress site
 
 mySQL
 
@@ -78,19 +113,9 @@ WordPress
 
 (These values should differ from the ones used in the real site's wp-config.php.)
 
-### php
-
-(mostly copied from my Mac OSX terminal window)
-
-    cd work/components/php-4.4.9/
-    ./configure --with-apxs2=/usr/local/apache2/bin/apxs --with-mysql
-    make
-    sudo make install
-    [edit php.ini-recommended]
-    [edit php.ini-dist]
-    sudo cp php.ini-dist /usr/local/lib/php.ini
 
 #### phpMyAdmin (mySQL admin)
+
 
 Backing up db:
 
@@ -98,19 +123,31 @@ Backing up db:
 
 installation: 
 
-    http://mysql.ty3.net/Documentation.html
+    
 
 unzip to apache2 htdocs:
 
     /usr/local/apache2/htdocs/phpMyAdmin-2.11.10-english
+    
+or newer location... (had to tweak authentication section)
+    
+    /usr/local/Cellar/httpd/2.2.27/share/apache2/htdocs/phpMyAdmin-2.11.10-english
     
 edit config.inc.php
 
     http://localhost/phpMyAdmin-2.11.10-english/Documentation.html
     http://localhost/phpMyAdmin-2.11.10-english/scripts/setup.php
     http://localhost/phpMyAdmin-2.11.10-english/
+    
+upgrading
+
+
 
 ### mySQL
+
+see (for mysql socket file)
+
+    /etc/my.cnf
 
 no root password
 
@@ -120,15 +157,48 @@ misc commands:
     mysqlshow -u root
     mysqlshow -u root wordpress
     mysqladmin
+    SELECT user,  Length(`Password`) FROM `mysql`.`user`;    
+
+OS X (Snow Leopard) specific:
+
+    sudo /usr/local/mysql/support-files/mysql.server start
+
+    sudo /usr/local/mysql/support-files/mysql.server stop
     
+#### procedure for updating local db from dump of live db
+
+   
 backup
     
     mysqldump --add-drop-table -u root -h localhost -p kirkwoodcoc | gzip -c > blog.bak.sql.gzip
     mysqldump --add-drop-table -u root -h localhost -p kirkwoodcoc > blog.bak.sql
+    
+notes: *do* drop tables, *don't* create database
+
+hand-edit exported file, change `CREATE DATABASE ___` to `kirkwoodcoc2`
 
 restore from backup
 
-    mysql -u root -h localhost -p kirkwoodcoc < ~/play/church/bosco_kirkwoodcoc_2010-02-13.sql
+    mysql -u wp -h localhost -p kirkwoodcoc < ~/play/church/bosco_kirkwoodcoc_2010-02-13.sql
+
+when prompted for password
+
+    wp
+
+AFTER copying database (from remote to local):
+http://codex.wordpress.org/Changing_The_Site_URL
+
+    select concat('[audio:', post_content,']') from kwcoc_posts where substring(post_content, 1, 7) = 'http://'
+
+    update kwcoc_posts set post_content=concat('[audio:', post_content,']') where substring(post_content, 1, 7) = 'http://'
+
+example 
+
+    mysql -u root -p
+    use bosco;
+    show tables;
+    select count(*) from kwcoc_posts;
+
 
 #### update wordpress admin pwd:
 
@@ -147,6 +217,7 @@ some old commands I made note of:
     mysql -u root
     CREATE DATABASE wordpress;
     GRANT ALL PRIVILEGES ON wordpress.* TO "wp"@"localhost" IDENTIFIED BY OLD_PASSWORD("wp");
+    GRANT ALL PRIVILEGES ON kirkwoodcoc2.* TO "wp"@"localhost" IDENTIFIED BY PASSWORD("wp");
     FLUSH PRIVILEGES;
     SET PASSWORD FOR 'wp'@'localhost' = OLD_PASSWORD('wp');
     SHOW COLUMNS FROM mydb.mytable;
@@ -164,7 +235,49 @@ some old commands I made note of:
 
 ### apache
 
-#### Apache 2.0.63 install
+#### quickstart
+
+* start
+
+    sudo /usr/local/apache2/bin/apachectl -k start
+    
+* browse to
+
+    http://kirkwoodcoc.localhost/    
+
+* configure
+
+    /usr/local/apache2/conf/httpd.conf
+
+
+#### Apache 2.2.7 homebrew
+
+[sbale ~ (mac-os-x)]$brew install httpd
+==> Downloading http://www.apache.org/dist/httpd/httpd-2.2.27.tar.bz2
+######################################################################## 100.0%
+==> ./configure --prefix=/usr/local/Cellar/httpd/2.2.27 --mandir=/usr/local/Cellar/httpd/2.2.27/share/man --localstatedir=/usr/local/var/apache2 --sysconfdir=/usr/local/etc/a
+==> make
+==> make install
+==> Caveats
+To have launchd start httpd at login:
+    ln -sfv /usr/local/opt/httpd/*.plist ~/Library/LaunchAgents
+Then to load httpd now:
+    launchctl load ~/Library/LaunchAgents/homebrew.mxcl.httpd.plist
+==> Summary
+/usr/local/Cellar/httpd/2.2.27: 1319 files, 22M, built in 5.6 minutes
+
+#### Apache 2.2.7
+
+See
+
+    /usr/local/Cellar/httpd/2.2.27
+    start.sh
+    local.http.conf
+    http://[localhost]/phpMyAdmin-2.11.10-english/index.php
+    http://kirkwoodcoc.localhost/
+    /usr/local/Cellar/httpd/2.2.27/share/apache2/htdocs/phpMyAdmin-2.11.10-english
+
+#### (OLD) Apache 2.0.63 install
 
 use "sudo" to install and start
 
@@ -197,12 +310,3 @@ PERMALINKS
 
 DirectoryIndex index.html index.html.var index.php
 
-
-### other
-
-AFTER copying database (from remote to local):
-http://codex.wordpress.org/Changing_The_Site_URL
-
-    select concat('[audio:', post_content,']') from kwcoc_posts where substring(post_content, 1, 7) = 'http://'
-
-    update kwcoc_posts set post_content=concat('[audio:', post_content,']') where substring(post_content, 1, 7) = 'http://'
