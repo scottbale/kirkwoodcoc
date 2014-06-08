@@ -1,13 +1,6 @@
 <?php
 /**
- * WordPress SSH2 Filesystem.
- *
- * @package WordPress
- * @subpackage Filesystem
- */
-
-/**
- * WordPress Filesystem Class for implementing SSH2.
+ * WordPress Filesystem Class for implementing SSH2
  *
  * To use this class you must follow these steps for PHP 5.2.6+
  *
@@ -35,10 +28,10 @@
  *
  * Note: as of WordPress 2.8, This utilises the PHP5+ function 'stream_get_contents'
  *
- * @since 2.7
+ * @since 2.7.0
+ *
  * @package WordPress
  * @subpackage Filesystem
- * @uses WP_Filesystem_Base Extends class
  */
 class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 
@@ -48,7 +41,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	var $errors = array();
 	var $options = array();
 
-	function WP_Filesystem_SSH2($opt='') {
+	function __construct($opt='') {
 		$this->method = 'ssh2';
 		$this->errors = new WP_Error();
 
@@ -73,7 +66,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		else
 			$this->options['hostname'] = $opt['hostname'];
 
-		if ( isset($opt['base']) && ! empty($opt['base']) )
+		if ( ! empty($opt['base']) )
 			$this->wp_base = $opt['base'];
 
 		// Check if the options provided are OK.
@@ -150,7 +143,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		return false;
 	}
 
-	function get_contents($file, $type = '', $resumepos = 0 ) {
+	function get_contents( $file ) {
 		$file = ltrim($file, '/');
 		return file_get_contents('ssh2.sftp://' . $this->sftp_link . '/' . $file);
 	}
@@ -160,14 +153,20 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		return file('ssh2.sftp://' . $this->sftp_link . '/' . $file);
 	}
 
-	function put_contents($file, $contents, $type = '' ) {
-		$file = ltrim($file, '/');
-		return false !== file_put_contents('ssh2.sftp://' . $this->sftp_link . '/' . $file, $contents);
+	function put_contents($file, $contents, $mode = false ) {
+		$ret = file_put_contents( 'ssh2.sftp://' . $this->sftp_link . '/' . ltrim( $file, '/' ), $contents );
+
+		if ( $ret !== strlen( $contents ) )
+			return false;
+
+		$this->chmod($file, $mode);
+
+		return true;
 	}
 
 	function cwd() {
 		$cwd = $this->run_command('pwd');
-		if( $cwd )
+		if ( $cwd )
 			$cwd = trailingslashit($cwd);
 		return $cwd;
 	}
@@ -180,8 +179,8 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		if ( ! $this->exists($file) )
 			return false;
 		if ( ! $recursive || ! $this->is_dir($file) )
-			return $this->run_command(sprintf('chgrp %o %s', $mode, escapeshellarg($file)), true);
-		return $this->run_command(sprintf('chgrp -R %o %s', $mode, escapeshellarg($file)), true);
+			return $this->run_command(sprintf('chgrp %s %s', escapeshellarg($group), escapeshellarg($file)), true);
+		return $this->run_command(sprintf('chgrp -R %s %s', escapeshellarg($group), escapeshellarg($file)), true);
 	}
 
 	function chmod($file, $mode = false, $recursive = false) {
@@ -202,12 +201,22 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		return $this->run_command(sprintf('chmod -R %o %s', $mode, escapeshellarg($file)), true);
 	}
 
-	function chown($file, $owner, $recursive = false ) {
+	/**
+	 * Change the ownership of a file / folder.
+	 *
+	 * @since Unknown
+	 *
+	 * @param string $file    Path to the file.
+	 * @param mixed  $owner   A user name or number.
+	 * @param bool $recursive Optional. If set True changes file owner recursivly. Defaults to False.
+	 * @return bool Returns true on success or false on failure.
+	 */
+	function chown( $file, $owner, $recursive = false ) {
 		if ( ! $this->exists($file) )
 			return false;
 		if ( ! $recursive || ! $this->is_dir($file) )
-			return $this->run_command(sprintf('chown %o %s', $mode, escapeshellarg($file)), true);
-		return $this->run_command(sprintf('chown -R %o %s', $mode, escapeshellarg($file)), true);
+			return $this->run_command(sprintf('chown %s %s', escapeshellarg($owner), escapeshellarg($file)), true);
+		return $this->run_command(sprintf('chown -R %s %s', escapeshellarg($owner), escapeshellarg($file)), true);
 	}
 
 	function owner($file) {
@@ -221,7 +230,7 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	}
 
 	function getchmod($file) {
-		return substr(decoct(@fileperms( 'ssh2.sftp://' . $this->sftp_link . '/' . ltrim($file, '/') )),3);
+		return substr( decoct( @fileperms( 'ssh2.sftp://' . $this->sftp_link . '/' . ltrim( $file, '/' ) ) ), -3 );
 	}
 
 	function group($file) {
@@ -234,28 +243,28 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 		return $grouparray['name'];
 	}
 
-	function copy($source, $destination, $overwrite = false ) {
-		if( ! $overwrite && $this->exists($destination) )
+	function copy($source, $destination, $overwrite = false, $mode = false) {
+		if ( ! $overwrite && $this->exists($destination) )
 			return false;
 		$content = $this->get_contents($source);
-		if( false === $content)
+		if ( false === $content)
 			return false;
-		return $this->put_contents($destination, $content);
+		return $this->put_contents($destination, $content, $mode);
 	}
 
 	function move($source, $destination, $overwrite = false) {
 		return @ssh2_sftp_rename($this->link, $source, $destination);
 	}
 
-	function delete($file, $recursive = false) {
-		if ( $this->is_file($file) )
+	function delete($file, $recursive = false, $type = false) {
+		if ( 'f' == $type || $this->is_file($file) )
 			return ssh2_sftp_unlink($this->sftp_link, $file);
 		if ( ! $recursive )
 			 return ssh2_sftp_rmdir($this->sftp_link, $file);
 		$filelist = $this->dirlist($file);
 		if ( is_array($filelist) ) {
 			foreach ( $filelist as $filename => $fileinfo) {
-				$this->delete($file . '/' . $filename, $recursive);
+				$this->delete($file . '/' . $filename, $recursive, $fileinfo['type']);
 			}
 		}
 		return ssh2_sftp_rmdir($this->sftp_link, $file);
@@ -302,11 +311,14 @@ class WP_Filesystem_SSH2 extends WP_Filesystem_Base {
 	}
 
 	function touch($file, $time = 0, $atime = 0) {
-		//Not implmented.
+		//Not implemented.
 	}
 
 	function mkdir($path, $chmod = false, $chown = false, $chgrp = false) {
 		$path = untrailingslashit($path);
+		if ( empty($path) )
+			return false;
+
 		if ( ! $chmod )
 			$chmod = FS_CHMOD_DIR;
 		if ( ! ssh2_sftp_mkdir($this->sftp_link, $path, $chmod, true) )
