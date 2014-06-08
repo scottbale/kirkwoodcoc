@@ -44,6 +44,14 @@ Debian Linux        ?.?            host operating system
 
 ### upgrading
 
+to 3.9.1
+
+1. download 3.9.1 zip
+1. copy files over current 
+    1. don't overwrite wp-includes themes or plugins
+1. refresh admin dashboard - was prompted to upgrade database, which I did
+1. upgrade any plugins (e.g. audio player)
+
 ### Git version control
 
 #### tags
@@ -179,7 +187,7 @@ hand-edit exported file, change `CREATE DATABASE ___` to `kirkwoodcoc2`
 
 restore from backup
 
-    mysql -u wp -h localhost -p kirkwoodcoc < ~/play/church/bosco_kirkwoodcoc_2010-02-13.sql
+    mysql -u wp -h localhost -p kirkwoodcoc < ~/sandbox/church/kirkwoodcoc_2010-02-13.sql
 
 when prompted for password
 
@@ -195,7 +203,7 @@ http://codex.wordpress.org/Changing_The_Site_URL
 example 
 
     mysql -u root -p
-    use bosco;
+    use kirkwoodcoc;
     show tables;
     select count(*) from kwcoc_posts;
 
