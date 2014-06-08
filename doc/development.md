@@ -51,6 +51,7 @@ to 3.9.1
     1. don't overwrite wp-includes themes or plugins
 1. refresh admin dashboard - was prompted to upgrade database, which I did
 1. upgrade any plugins (e.g. audio player)
+1. sftp updated files (had to use FireFTP to do so recursively)
 
 ### Git version control
 
