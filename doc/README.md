@@ -121,3 +121,58 @@ You will be prompted for a password, use `<%= kirkwoodcoc-ipower %>`
 
 ### news
 
+Appendix A: Audacity
+--------------------
+
+Audacity is free software to edit audio files. I use it to clean up
+sermon audio files before FTP'ing them up to the website.
+
+    http://audacity.sourceforge.net/
+
+### Basic workflow
+
+1. import audio (select sermon .mp3 file)
+1. edit out songs, gaps, etc.
+1. apply noise removal, compression (optional)
+1. export as .mp3
+
+### shortcut keys (Linux)
+
+* Ctrl-e - zoom to selection
+* Ctrl-f - zoom fit in window
+* Ctrl-1 - zoom in
+* Ctrl-3 - zoom out
+* Shift-Ctrl-F - zoom fit vertically
+* Shift-J - select beginning to cursor
+* Shift-K - select cursor to end
+* Shift-Ctrl-I - import audio
+* home - skip to start
+* end - skip to end
+* space - play
+* Ctrl-w - close track (don't save)
+* Ctrl-q - exit
+
+### noise removal
+
+    http://wiki.audacityteam.org/wiki/Noise_Removal
+    http://manual.audacityteam.org/man/Noise_Removal
+    
+Suggested settings:
+
+* Noise reduction (dB): 24
+* Sensitivity (dB): 0.00
+* Frequency Smoothing (Hz): 150
+* Attack/decay time (secs): 0.05
+
+### compression
+
+    http://wiki.audacityteam.org/wiki/Compressor
+    http://manual.audacityteam.org/man/Compressor    
+
+Suggested settings:
+
+* Threshold: -12 dB
+* Noise Floor: -25 dB
+* Radio: 2:1
+* Attack Time: 0.2 secs
+* Decay Time: 2.0 secs
