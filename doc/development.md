@@ -25,11 +25,11 @@ For Developers/Maintainers
 For must up-to-date host provider settings see
 [settings](http://www.ipower.com/controlpanel/settings.bml).
 
-Current software stack (5/24/14)
+Current software stack (6/13/14)
 -----------------------------------------------------------------------------------
 software            version used   description
 ------------------- -------------- ------------------------------------------------
-wordpress           2.9.1          blogging/website software
+wordpress           3.9.1          blogging/website software
 mysql               5.5.32         embedded database that WordPress
                                    uses to store content (pages,
                                    posts, accounts, etc.)
@@ -38,6 +38,12 @@ php                 5.2            programming language that WordPress
 apache              ?.?            web server                                   
 Debian Linux        ?.?            host operating system
 -----------------------------------------------------------------------------------
+
+#### Check installed versions at command line
+
+    $ mysql --version
+    $ php --version
+    $ apache
 
 
 ### WordPress
@@ -65,6 +71,99 @@ to 3.9.1
 
 Advanced - Running a local copy of the website
 ----------------------------------------------
+
+### Ubuntu Linux
+
+Helpful link: https://help.ubuntu.com/12.04/serverguide/httpd.html
+
+    sudo apt-get install apache2
+    sudo apt-get install php5 libapache2-mod-php5sudo apt-get install php5 libapache2-mod-php5sudo apt-get install php5 libapache2-mod-php5    
+    sudo apt-get install libapache2-mod-auth-mysql php5-mysql phpmyadmin
+    
+restart
+
+    sudo /etc/init.d/apache2 [start|stop|...]
+    sudo service apache2 [restart|start|stop|...]
+
+restart - doesn't always work: 
+
+    sudo /usr/sbin/apachectl --start
+
+paths of interest
+
+    /etc/php5/apache2/php.ini
+    /etc/init.d/apache2
+    /etc/apache2/apache2.conf
+    /etc/apache2/conf.d/
+    /etc/phpmyadmin/apache.conf
+    /var/log/apache2/
+    
+verify php install
+
+    echo "<?php phpinfo(); ?>" >> /var/www/test.php
+    http://<localhost>/test.php
+    
+
+#### apache2 configuration
+
+created kirkwoodcoc-specific config file
+
+    pushd /etc/apache2/
+    sudo cp sites-available/default sites-available/kirkwoodcoc
+    
+then edit `kirkwoodcoc` file, then
+    
+    sudo a2ensite kirkwoodcoc
+    sudo service apache2 reload
+
+configure phpmyadmin to work with apache, add this line
+
+    Include /etc/phpmyadmin/apache.conf    
+
+installed additional php modules
+
+    sudo apt-get install php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl
+    
+enable apache2 mod_rewrite (for wp permalinks)
+
+    cat /etc/apache2/mods-available/rewrite.load
+    sudo a2enmod rewrite
+    ll /etc/apache2/mods-enabled/
+    sudo /etc/init.d/apache2 restart
+    
+edit 
+
+    /etc/hosts
+    
+file, add `kirkwoodcoc.localhost` to loopback ip address `127.0.0.1`.
+    
+Configure fully-qualified domain name, gets around warning "apache2:
+Could not reliably determine the server's fully qualified domain name,
+using 127.0.0.1 for ServerName".
+
+    sudo sh -c "echo ServerName $HOSTNAME > /etc/apache2/conf.d/fqdn"
+    
+phpMyAdmin found at: http://localhost/phpmyadmin
+    
+#### mysql
+
+Export gzipped file from iPower phpmyadmin. Unzip. Edit first dozen or so lines:
+
+* comment out `CREATE` statement, if present
+* change db name to `kirkwoodcoc2` (or whatever is in `wp-config.php`) - three places I saw
+
+In mysql CLI
+
+    mysql -u root -p
+    CREATE DATABASE kirkwoodcoc2 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+    CREATE USER "wp"@"localhost" IDENTIFIED BY "wp";
+    GRANT ALL PRIVILEGES ON kirkwoodcoc2.* TO "wp"@"localhost" IDENTIFIED BY "wp";
+    quit
+    
+then import the .sql file (this takes a while)
+
+    sudo mysql -u wp -h localhost -p kirkwoodcoc2 < [exported filename].sql
+
 
 ### OSX 10.6 - Snow Leopard
 
@@ -226,8 +325,9 @@ some old commands I made note of:
 
     mysql -u root
     CREATE DATABASE wordpress;
+    CREATE USER "wp"@"localhost" IDENTIFIED BY "wp";
     GRANT ALL PRIVILEGES ON wordpress.* TO "wp"@"localhost" IDENTIFIED BY OLD_PASSWORD("wp");
-    GRANT ALL PRIVILEGES ON kirkwoodcoc2.* TO "wp"@"localhost" IDENTIFIED BY PASSWORD("wp");
+    GRANT ALL PRIVILEGES ON kirkwoodcoc2.* TO "wp"@"localhost" IDENTIFIED BY "wp";
     FLUSH PRIVILEGES;
     SET PASSWORD FOR 'wp'@'localhost' = OLD_PASSWORD('wp');
     SHOW COLUMNS FROM mydb.mytable;
