@@ -52,6 +52,7 @@ to 3.9.1
 1. refresh admin dashboard - was prompted to upgrade database, which I did
 1. upgrade any plugins (e.g. audio player)
 1. sftp updated files (had to use FireFTP to do so recursively)
+1. after upgrade, got some 404 errors for about ~30 min, then stopped. Caching?! *shrugs*
 
 ### Git version control
 
