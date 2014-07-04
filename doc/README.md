@@ -138,19 +138,37 @@ sermon audio files before FTP'ing them up to the website.
 
 ### shortcut keys (Linux)
 
-* Ctrl-e - zoom to selection
-* Ctrl-f - zoom fit in window
-* Ctrl-1 - zoom in
-* Ctrl-3 - zoom out
-* Shift-Ctrl-F - zoom fit vertically
-* Shift-J - select beginning to cursor
-* Shift-K - select cursor to end
-* Shift-Ctrl-I - import audio
+* ⌃-e - zoom to selection
+* ⌃-f - zoom fit in window
+* ⌃-1 - zoom in
+* ⌃-3 - zoom out
+* ⇧-⌃-f - zoom fit vertically
+* ⇧-j - select beginning to cursor
+* ⇧-k - select cursor to end
+* ⇧-⌃-i - import audio
 * home - skip to start
 * end - skip to end
 * space - play
-* Ctrl-w - close track (don't save)
-* Ctrl-q - exit
+* ⌃-w - close track (don't save)
+* ⌃-q - exit
+* ⌃-u, ⇧-⌃-u mute, unmute all
+
+### shortcut keys (Mac OS)
+
+* ⌘-e - zoom to selection
+* ⌘-f - zoom fit in window
+* ⌘-1 - zoom in
+* ⌘-3 - zoom out
+* ⇧-⌘-f - zoom fit vertically
+* ⇧-j - select beginning to cursor
+* ⇧-k - select cursor to end
+* ⇧-⌘-i - import audio
+* home - skip to start
+* end - skip to end
+* space - play
+* ⌘-w - close track (don't save)
+* ⌘-q - exit
+* ⌘-u, ⇧-⌘-u mute, unmute all
 
 ### noise removal
 
