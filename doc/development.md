@@ -48,6 +48,13 @@ Debian Linux        ?.?            host operating system
 
 ### WordPress
 
+See
+
+    wp-config.php
+    php-test.php
+
+'home' and 'site' urls can be stored either in `wp-config.php` (`WP_HOME`, `WP_SITEURL`) or in mysql `kwcoc_options` table with `option_name` column of `home` and `siteurl`.
+
 ### upgrading
 
 to 3.9.1
@@ -167,6 +174,11 @@ In mysql CLI
 then import the .sql file (this takes a while)
 
     sudo mysql -u wp -h localhost -p kirkwoodcoc2 < [exported filename].sql
+
+update home and site urls in mysql (via CLI)
+
+    update kwcoc_options set option_value='http://kirkwoodcoc.localhost' where option_name='home';
+    update kwcoc_options set option_value='http://kirkwoodcoc.localhost/wordpress' where option_name='siteurl';
 
 
 ### OSX 10.6 - Snow Leopard
