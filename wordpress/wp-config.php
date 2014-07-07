@@ -34,8 +34,10 @@ define('DB_CHARSET', '');
 define('DB_COLLATE', '');
 
 /** uncomment for localhost copy */
+/*
 define('WP_HOME','http://kirkwoodcoc.localhost');
 define('WP_SITEURL','http://kirkwoodcoc.localhost/wordpress');
+ */
 
 /**#@+
  * Authentication Unique Keys.
