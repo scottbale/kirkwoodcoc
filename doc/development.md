@@ -424,3 +424,6 @@ PERMALINKS
 
 DirectoryIndex index.html index.html.var index.php
 
+Permalink Custom Structure:
+
+    /%year%/%monthnum%/%day%/%category%/%postname%
