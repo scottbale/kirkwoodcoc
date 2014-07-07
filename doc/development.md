@@ -144,6 +144,10 @@ using 127.0.0.1 for ServerName".
     sudo sh -c "echo ServerName $HOSTNAME > /etc/apache2/conf.d/fqdn"
     
 phpMyAdmin found at: http://localhost/phpmyadmin
+
+permalinks broken (404), had to change `AllowOverride None` to `AllowOverride All` in
+
+    /etc/apache2/sites-available/kirkwoodcoc
     
 #### mysql
 
