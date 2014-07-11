@@ -84,11 +84,14 @@ The website files are organized in the following manner.
                 ├── audio
                 ├── classHandouts
                 └── img
-            ├── wp-admin
-            ├── wp-content
-                ├── plugins
-                └── themes
-            └── wp-includes
+            └── wordpress
+                ├── index.php
+                ├── wp-config.php         
+                ├── wp-admin
+                ├── wp-content
+                    ├── plugins
+                    └── themes
+                └── wp-includes
             
 A few notes:
 
@@ -96,9 +99,16 @@ A few notes:
     * the actual sermon audio `.mp3` files
     * the class handouts (usually `.pdf` files)
     * image files
-* Directories named `wp-*` contain the actual WordPress files. For the
-  most part they are `.php` files, which are text files written in the
-  PHP programming language.
+* `wordpress` - directory containing the actual WordPress files. For
+  the most part they are `.php` files, which are text files written in
+  the PHP programming language. Whenever Wordpress is upgraded, this
+  is the folder whose contents need to be replaced.
+    * `wp-config.php` - various site-wide configuration
+    * `index.php` - loads the home page. (There are two files with
+      this name; one redirects to the other.)
+    * `wp-content` - folder containing `plugins` and `themes`, which
+      are configurable. This is where plugins and/or themes need to be
+      installed (unzipped) to.
 
 
 #### secure ftp
