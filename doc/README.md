@@ -137,7 +137,7 @@ Appendix A: Audacity
 Audacity is free software to edit audio files. I use it to clean up
 sermon audio files before FTP'ing them up to the website.
 
-    http://audacity.sourceforge.net/
+http://audacity.sourceforge.net/
 
 ### Basic workflow
 

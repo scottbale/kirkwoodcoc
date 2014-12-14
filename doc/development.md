@@ -74,6 +74,19 @@ to 3.9.1
     git tag -a -m "blah blah" 2.0.x
     git push --tags origin master
 
+### Files of interest
+
+Refer to `basic layout of files` in `README.md`
+
+Current Wordpress theme:
+
+    .../wp-content/themes/cleanhome/
+    
+File that controls the two most recent sermons which appear on the
+home page:
+
+    .../wp-content/themes/cleanhome/home.php
+
 \newpage
 
 Advanced - Running a local copy of the website
@@ -187,7 +200,7 @@ These are my notes from running my local copy of the website on my
 MacBook Pro running OSX 10.6 (Snow Leopard).
 
 1. start mysql (via System Preferences mysql pane)
-1. start apache
+1. start apache (use `start.sh` at root of project)
 1. export mysql db from live website, import to local copy
 
 ### php
@@ -366,6 +379,8 @@ some old commands I made note of:
 * start
 
     sudo /usr/local/apache2/bin/apachectl -k start
+    
+(or use `start.sh` at root of project, works for Mac OS X)
     
 * browse to
 
