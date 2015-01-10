@@ -119,6 +119,11 @@ Open a secure FTP (sftp) session using this command:
     
 You will be prompted for a password, use `<%= kirkwoodcoc-ipower %>`
 
+Note on recursive sftp: first make the directory, then `put`, e.g.:
+
+    mkdir foo
+    put -r foo
+
 ### WordPress account
 
 ### posting sermon audio
