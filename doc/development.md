@@ -171,7 +171,11 @@ permalinks broken (404), had to change `AllowOverride None` to `AllowOverride Al
     
 #### mysql
 
-Export gzipped file from iPower phpmyadmin. Unzip. Edit first dozen or so lines:
+Export gzipped file from iPower phpmyadmin. Unzip:
+
+    gunzip __EXPORTED_FILE__.sql.gz
+
+Edit first dozen or so lines:
 
 * comment out `CREATE` statement, if present
 * change db name to `kirkwoodcoc2` (or whatever is in `wp-config.php`) - three places I saw
