@@ -72,6 +72,13 @@ $table_prefix  = 'kwcoc_';
  */
 define ('WPLANG', '');
 
+/** 
+ * Additional security 
+ * codex.wordpress.org/Editing_wp-config.php
+ */
+define( 'DISALLOW_FILE_EDIT', true );
+define( 'FORCE_SSL_ADMIN', true );
+
 /* That's all, stop editing! Happy blogging. */
 
 /** WordPress absolute path to the Wordpress directory. */
