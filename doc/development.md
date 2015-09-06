@@ -25,12 +25,12 @@ For Developers/Maintainers
 For must up-to-date host provider settings see
 [settings](http://www.ipower.com/controlpanel/settings.bml).
 
-Current software stack (6/13/14)
+Current software stack (9/5/15)
 -----------------------------------------------------------------------------------
 software            version used   description
 ------------------- -------------- ------------------------------------------------
-wordpress           3.9.1          blogging/website software
-mysql               5.5.32         embedded database that WordPress
+wordpress           4.3            blogging/website software
+mysql               5.5.44         embedded database that WordPress
                                    uses to store content (pages,
                                    posts, accounts, etc.)
 php                 5.2            programming language that WordPress
@@ -51,7 +51,7 @@ Debian Linux        ?.?            host operating system
 See
 
     wp-config.php
-    php-test.php
+    phptest.php
 
 'home' and 'site' urls can be stored either in `wp-config.php` (`WP_HOME`, `WP_SITEURL`) or in mysql `kwcoc_options` table with `option_name` column of `home` and `siteurl`.
 
