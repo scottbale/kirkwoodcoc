@@ -35,10 +35,10 @@
 		<h1>
 
 		<a href="<?php echo get_option('home'); ?>">
-		<?php bloginfo('name'); ?></a>
+		Kirkwood</a>
 		</h1>
 		
-		<h2><?php bloginfo('description'); ?></h2>
+		<h2>Church of Christ</h2>
 		
 		</div>
 
