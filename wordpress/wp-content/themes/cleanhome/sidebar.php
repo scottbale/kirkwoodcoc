@@ -34,9 +34,7 @@
 					<?php wp_register(); ?>
 					<li><a title="Subscribe to all updates" href="<?php bloginfo('rss2_url'); ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/04.png" /> Subscribe</a></li>
                     <?php $url = get_bloginfo("wpurl"); ?>
-                    <?php $itunesurl = str_replace('http', 'itpc', $url); ?>
                     <li><a title="Subscribe to Sermons Podcast" href="<?php $url; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/17.png" /> Podcast </a></li>
-                    <li><a title="Subscribe to Sermons Podcast in iTunes" href="<?php echo $itunesurl; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/podcast_icon_30.jpg" /> iTunes</a></li>
 					<li><?php wp_loginout(); ?></li>
 					<?php wp_meta(); ?>
 				</ul>
