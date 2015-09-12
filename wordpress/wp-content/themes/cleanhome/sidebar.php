@@ -48,6 +48,7 @@
 			<h3></h3>
 				<ul>
 					<?php wp_register(); ?>
+                    <li><a href="http://www.facebook.com/kirkwoodcoc"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/fb.png" />FaceBook</a></li>
 					<li><a title="Subscribe to all updates" href="<?php bloginfo('rss2_url'); ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/04.png" /> Subscribe</a></li>
                     <?php $url = get_bloginfo("wpurl"); ?>
                     <li><a title="Subscribe to Sermons Podcast" href="<?php $url; ?>/category/sermon/feed"><img src="<?php bloginfo('stylesheet_directory'); ?>/images/17.png" /> Podcast </a></li>
