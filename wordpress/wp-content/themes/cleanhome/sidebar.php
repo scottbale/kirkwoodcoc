@@ -2,6 +2,22 @@
 	<?php if ( !function_exists('dynamic_sidebar')
         || !dynamic_sidebar('Sidebar') ) : ?>
 
+
+        <!-- TODO hours should be a custom tag or plugin -->
+        <div class="block">
+			<h3>Times</h3>
+            <h4>Sunday</h4>
+            <ul>
+        <li class="nolink">9:30 a.m. bible class</li>
+        <li class="nolink">10:20 a.m. morning worship</li>
+        <li class="nolink">6:00 p.m. evening worship</li>
+            </ul>
+            <h4>Wednesday</h4>
+            <ul>
+        <li class="nolink">7:00 p.m. bible class</li>
+            </ul>
+        </div>
+       
 		<div class="block">
 			<h3>Contact Us</h3>
 			<ul>
