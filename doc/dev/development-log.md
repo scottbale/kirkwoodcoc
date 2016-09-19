@@ -68,22 +68,21 @@ install: `php55`, `httpd24`, `mod24_ssl`, `mysql55`, `mysql55-server`, `php55-my
 
 
 output from starting:
-{quote}
-PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER !
-To do so, start the server, then issue the following commands:
 
-/usr/bin/mysqladmin -u root password 'new-password'
-/usr/bin/mysqladmin -u root -h ip-172-30-0-142 password 'new-password'
-
-Alternatively you can run:
-/usr/bin/mysql_secure_installation
-
-You can start the MySQL daemon with:
-cd /usr ; /usr/bin/mysqld_safe &
-
-You can test the MySQL daemon with mysql-test-run.pl
-cd /usr/mysql-test ; perl mysql-test-run.pl
-{quote}
+> PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER !
+> To do so, start the server, then issue the following commands:
+>
+> /usr/bin/mysqladmin -u root password 'new-password'
+> /usr/bin/mysqladmin -u root -h ip-172-30-0-142 password 'new-password'
+> 
+> Alternatively you can run:
+> /usr/bin/mysql_secure_installation
+> 
+> You can start the MySQL daemon with:
+> cd /usr ; /usr/bin/mysqld_safe &
+> 
+> You can test the MySQL daemon with mysql-test-run.pl
+> cd /usr/mysql-test ; perl mysql-test-run.pl
 
 ### install php mysql extension
 
@@ -108,7 +107,7 @@ Back to php 5.3, httpd 2.2
     sudo yum remove httpd24 mod24_ssl php55-mysqlnd
     sudo yum install httpd httpd-tools-2.2.29-1.4 mod_ssl php php-mysqlnd
 
-## 5/30/19
+## 5/30/15
 
 more on kirkwoodcoc on ec2...
 
@@ -126,6 +125,7 @@ more kirkwoodcoc ec2
 
 startup checklist:
 
+* if necessary update `wp-config.php` from `.secret/dev/`
 * if necessary update `wp-config.php` HOME and SITE_URL
 * start services
 
@@ -166,3 +166,19 @@ kirkwoodcoc app ID: `947516055286760`
     use >dbname<;
     show tables;
     
+## 3/27/16
+
+WIP, used `wp-add-custom-css` plugin v 0.9.7
+
+## 9/17/16
+
+public DNS 54.162.165.169
+
+1. Created `bin/` directory. Writing python script to export Wordpress database from mysql.
+1. Created `doc/dev/` directory, moved docs around.
+
+## 9/18/16
+
+* upgrade to Wordpress 4.3.1
+* upgrade plugins
+
