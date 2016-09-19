@@ -18,11 +18,17 @@ class Jetpack_PostImages {
 		$images = array();
 
 		$post = get_post( $post_id );
-		if ( !empty( $post->post_password ) )
+
+		if ( ! $post ) {
 			return $images;
+		}
+
+		if ( ! empty( $post->post_password ) ) {
+			return $images;
+		}
 
 		if ( false === has_shortcode( $post->post_content, 'slideshow' ) ) {
-			return false; // no slideshow - bail
+			return $images; // no slideshow - bail
 		}
 
 		$permalink = get_permalink( $post->ID );
@@ -40,11 +46,11 @@ class Jetpack_PostImages {
 
 		foreach ( $slideshow_matches as $slideshow_match ) {
 			$slideshow = do_shortcode_tag( $slideshow_match );
-			if ( false === $pos = stripos( $slideshow, 'slideShow.images' ) ) // must be something wrong - or we changed the output format in which case none of the following will work
+			if ( false === $pos = stripos( $slideshow, 'jetpack-slideshow' ) ) // must be something wrong - or we changed the output format in which case none of the following will work
 				continue;
 			$start = strpos( $slideshow, '[', $pos );
 			$end = strpos( $slideshow, ']', $start );
-			$post_images = json_decode( str_replace( "'", '"', substr( $slideshow, $start, $end - $start + 1 ) ) ); // parse via JSON
+			$post_images = json_decode( wp_specialchars_decode( str_replace( "'", '"', substr( $slideshow, $start, $end - $start + 1 ) ), ENT_QUOTES ) ); // parse via JSON
 			foreach ( $post_images as $post_image ) {
 				if ( !$post_image_id = absint( $post_image->id ) )
 					continue;
@@ -85,63 +91,51 @@ class Jetpack_PostImages {
 		$images = array();
 
 		$post = get_post( $post_id );
-		if ( !empty( $post->post_password ) )
-			return $images;
 
-		if ( false === has_shortcode( $post->post_content, 'gallery' ) ) {
-			return false; // no gallery - bail
+		if ( ! $post ) {
+			return $images;
+		}
+
+		if ( ! empty( $post->post_password ) ) {
+			return $images;
 		}
 
 		$permalink = get_permalink( $post->ID );
 
-		// CATS: All your base are belong to us
-		$old_post = $GLOBALS['post'];
-		$GLOBALS['post'] = $post;
-		$old_shortcodes = $GLOBALS['shortcode_tags'];
-		$GLOBALS['shortcode_tags'] = array( 'gallery' => $old_shortcodes['gallery'] );
+		$galleries = get_post_galleries( $post->ID, false );
 
-		// Find all the galleries
-		preg_match_all( '/' . get_shortcode_regex() . '/s', $post->post_content, $gallery_matches, PREG_SET_ORDER );
-
-		foreach ( $gallery_matches as $gallery_match ) {
-			$gallery = do_shortcode_tag( $gallery_match );
-
-			// Um... no images in the gallery - bail
-			if ( false === $pos = stripos( $gallery, '<img' ) )
-				continue;
-
-			preg_match_all( '/<img\s+[^>]*src=([\'"])([^\'"]*)\\1/', $gallery, $image_match, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE );
-
-			$a_pos = 0;
-			foreach ( $image_match[2] as $src ) {
-				list( $raw_src ) = explode( '?', $src[0] ); // pull off any Query string (?w=250)
-				$raw_src = wp_specialchars_decode( $raw_src ); // rawify it
-				$raw_src = esc_url_raw( $raw_src ); // clean it
-
-				$a_pos = strrpos( substr( $gallery, 0, $src[1] ), '<a', $a_pos ); // is there surrounding <a>?
-
-				if ( false !== $a_pos && preg_match( '/<a\s+[^>]*href=([\'"])([^\'"]*)\\1/', $gallery, $href_match, 0, $a_pos ) ) {
-					$href = wp_specialchars_decode( $href_match[2] );
-					$href = esc_url_raw( $href );
-				} else {
-					// CATS: You have no chance to survive make your time
-					$href = $raw_src;
+		foreach ( $galleries as $gallery ) {
+			if ( isset( $gallery['type'] ) && 'slideshow' === $gallery['type'] && ! empty( $gallery['ids'] ) ) {
+				$image_ids = explode( ',', $gallery['ids'] );
+				$image_size = isset( $gallery['size'] ) ? $gallery['size'] : 'thumbnail';
+				foreach ( $image_ids as $image_id ) {
+					$image = wp_get_attachment_image_src( $image_id, $image_size );
+					if ( ! empty( $image[0] ) ) {
+						list( $raw_src ) = explode( '?', $image[0] ); // pull off any Query string (?w=250)
+						$raw_src = wp_specialchars_decode( $raw_src ); // rawify it
+						$raw_src = esc_url_raw( $raw_src ); // clean it
+						$images[] = array(
+							'type'  => 'image',
+							'from'  => 'gallery',
+							'src'   => $raw_src,
+							'href'  => $permalink,
+						);
+					}
 				}
-
-				$a_pos = $src[1];
-
-				$images[] = array(
-					'type'  => 'image',
-					'from'  => 'gallery',
-					'src'   => $raw_src,
-					'href'  => $permalink, // $href,
-				);
+			} elseif ( ! empty( $gallery['src'] ) ) {
+				foreach ( $gallery['src'] as $src ) {
+					list( $raw_src ) = explode( '?', $src ); // pull off any Query string (?w=250)
+					$raw_src = wp_specialchars_decode( $raw_src ); // rawify it
+					$raw_src = esc_url_raw( $raw_src ); // clean it
+					$images[] = array(
+						'type'  => 'image',
+						'from'  => 'gallery',
+						'src'   => $raw_src,
+						'href'  => $permalink,
+					);
+				}
 			}
 		}
-
-		// Captain: For great justice
-		$GLOBALS['shortcode_tags'] = $old_shortcodes;
-		$GLOBALS['post'] = $old_post;
 
 		return $images;
 	}
@@ -154,8 +148,10 @@ class Jetpack_PostImages {
 		$images = array();
 
 		$post = get_post( $post_id );
-		if ( !empty( $post->post_password ) )
+
+		if ( ! empty( $post->post_password ) ) {
 			return $images;
+		}
 
 		$post_images = get_posts( array(
 			'post_parent' => $post_id,   // Must be children of post
@@ -164,8 +160,9 @@ class Jetpack_PostImages {
 			'post_mime_type' => 'image', // Must be images
 		) );
 
-		if ( !$post_images )
-			return false;
+		if ( ! $post_images ) {
+			return $images;
+		}
 
 		$permalink = get_permalink( $post_id );
 
@@ -226,11 +223,14 @@ class Jetpack_PostImages {
 		$images = array();
 
 		$post = get_post( $post_id );
-		if ( !empty( $post->post_password ) )
-			return $images;
 
-		if ( !function_exists( 'get_post_thumbnail_id' ) )
+		if ( ! empty( $post->post_password ) ) {
 			return $images;
+		}
+
+		if ( ! function_exists( 'get_post_thumbnail_id' ) ) {
+			return $images;
+		}
 
 		$thumb = get_post_thumbnail_id( $post_id );
 
@@ -245,7 +245,13 @@ class Jetpack_PostImages {
 
 			$too_big = ( ( ! empty( $meta['width'] ) && $meta['width'] > 1200 ) || ( ! empty( $meta['height'] ) && $meta['height'] > 1200 ) );
 
-			if ( $too_big ) {
+			if (
+				$too_big &&
+				(
+					( method_exists( 'Jetpack', 'is_module_active' ) && Jetpack::is_module_active( 'photon' ) ) ||
+					( defined( 'WPCOM' ) && IS_WPCOM )
+				)
+			) {
 				$img_src = wp_get_attachment_image_src( $thumb, array( 1200, 1200 ) );
 			} else {
 				$img_src = wp_get_attachment_image_src( $thumb, 'full' );
@@ -262,6 +268,29 @@ class Jetpack_PostImages {
 				'href'       => get_permalink( $thumb ),
 			) );
 		}
+
+		if ( empty( $images ) && ( defined( 'IS_WPCOM' ) && IS_WPCOM ) ) {
+			$meta_thumbnail = get_post_meta( $post_id, '_jetpack_post_thumbnail', true );
+			if ( ! empty( $meta_thumbnail ) ) {
+				if ( ! isset( $meta_thumbnail['width'] ) || $meta_thumbnail['width'] < $width ) {
+					return $images;
+				}
+
+				if ( ! isset( $meta_thumbnail['height'] ) || $meta_thumbnail['height'] < $height ) {
+					return $images;
+				}
+
+				$images = array( array( // Other methods below all return an array of arrays
+					'type'       => 'image',
+					'from'       => 'thumbnail',
+					'src'        => $meta_thumbnail['URL'],
+					'src_width'  => $meta_thumbnail['width'],
+					'src_height' => $meta_thumbnail['height'],
+					'href'       => $meta_thumbnail['URL'],
+				) );
+			}
+		}
+
 		return $images;
 	}
 
@@ -275,16 +304,19 @@ class Jetpack_PostImages {
 
 		if ( is_numeric( $html_or_id ) ) {
 			$post = get_post( $html_or_id );
-			if ( empty( $post ) || !empty( $post->post_password ) )
+
+			if ( empty( $post ) || ! empty( $post->post_password ) ) {
 				return $images;
+			}
 
 			$html = $post->post_content; // DO NOT apply the_content filters here, it will cause loops
 		} else {
 			$html = $html_or_id;
 		}
 
-		if ( !$html )
+		if ( ! $html ) {
 			return $images;
+		}
 
 		preg_match_all( '!<img.*src=[\'"]([^"]+)[\'"].*/?>!iUs', $html, $matches );
 		if ( !empty( $matches[1] ) ) {

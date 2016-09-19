@@ -11,7 +11,8 @@ class Jetpack_RSS_Links_Widget extends WP_Widget {
 	function __construct() {
 		$widget_ops = array(
 			'classname' => 'widget_rss_links',
-			'description' => __( "Links to your blog's RSS feeds", 'jetpack' )
+			'description' => __( "Links to your blog's RSS feeds", 'jetpack' ),
+			'customize_selective_refresh' => true,
 		);
 		parent::__construct(
 			'rss_links',
@@ -107,7 +108,7 @@ class Jetpack_RSS_Links_Widget extends WP_Widget {
 			'image'      => __( 'Image Link', 'jetpack' ),
 			'text-image' => __( 'Text & Image Links', 'jetpack' )
 		);
-		echo '<p><label for="' . $this->get_field_id( 'format' ) . '">' . __( 'Format:', 'jetpack' ) . '
+		echo '<p><label for="' . $this->get_field_id( 'format' ) . '">' . _x( 'Format:', 'Noun', 'jetpack' ) . '
 		<select class="widefat" id="' . $this->get_field_id( 'format' ) . '" name="' . $this->get_field_name( 'format' ) . '" onchange="if ( this.value == \'text\' ) jQuery( \'#' . $this->get_field_id( 'image-settings' ) . '\' ).fadeOut(); else jQuery( \'#' . $this->get_field_id( 'image-settings' ) . '\' ).fadeIn();">';
 		foreach ( $formats as $format_option => $label ) {
 			echo '<option value="' . esc_attr( $format_option ) . '"';
@@ -170,6 +171,8 @@ class Jetpack_RSS_Links_Widget extends WP_Widget {
 		/**
 		 * Filters the target link attribute for the RSS link in the RSS widget.
 		 *
+		 * @module widgets
+		 *
 		 * @since 3.4.0
 		 *
 		 * @param bool false Control whether the link should open in a new tab. Default to false.
@@ -183,6 +186,8 @@ class Jetpack_RSS_Links_Widget extends WP_Widget {
 		if ( 'image' == $format || 'text-image' == $format ) {
 			/**
 			 * Filters the image used as RSS icon in the RSS widget.
+			 *
+			 * @module widgets
 			 *
 			 * @since 3.6.0
 			 *

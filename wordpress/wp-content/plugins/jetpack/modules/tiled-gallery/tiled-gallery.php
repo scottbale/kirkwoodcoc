@@ -20,7 +20,7 @@ class Jetpack_Tiled_Gallery {
 
 	public function tiles_enabled() {
 		// Check the setting status
-		return '' != get_option( 'tiled_galleries' );
+		return '' != Jetpack_Options::get_option_and_ensure_autoload( 'tiled_galleries', '' );
 	}
 
 	public function set_atts( $atts ) {
@@ -42,8 +42,10 @@ class Jetpack_Tiled_Gallery {
 		$this->float = is_rtl() ? 'right' : 'left';
 
 		// Default to rectangular is tiled galleries are checked
-		if ( $this->tiles_enabled() && ( ! $this->atts['type'] || 'default' == $this->atts['type'] ) )
-			$this->atts['type'] = 'rectangular';
+		if ( $this->tiles_enabled() && ( ! $this->atts['type'] || 'default' == $this->atts['type'] ) ) {
+			/** This filter is already documented in functions.gallery.php */
+			$this->atts['type'] = apply_filters( 'jetpack_default_gallery_type', 'rectangular' );
+		}
 
 		if ( !$this->atts['orderby'] ) {
 			$this->atts['orderby'] = sanitize_sql_orderby( $this->atts['orderby'] );
@@ -107,16 +109,25 @@ class Jetpack_Tiled_Gallery {
 		if ( empty( $attachments ) )
 			return '';
 
-		if ( is_feed() || defined( 'IS_HTML_EMAIL' ) )
+		if ( is_feed() || defined( 'IS_HTML_EMAIL' ) ) {
 			return '';
-		/**
-		 * Filters the permissible Tiled Gallery types.
-		 *
-		 * @since 3.7.0
-		 *
-		 * @param array Array of allowed types. Default: 'rectangular', 'square', 'circle', 'rectangle', 'columns'.
-		 */
-		if ( in_array( $this->atts['type'], $talaveras = apply_filters( 'jetpack_tiled_gallery_types', self::$talaveras ) ) ) {
+		}
+
+		if (
+			in_array(
+				$this->atts['type'],
+				/**
+				 * Filters the permissible Tiled Gallery types.
+				 *
+				 * @module tiled-gallery
+				 *
+				 * @since 3.7.0
+				 *
+				 * @param array Array of allowed types. Default: 'rectangular', 'square', 'circle', 'rectangle', 'columns'.
+				 */
+				$talaveras = apply_filters( 'jetpack_tiled_gallery_types', self::$talaveras )
+			)
+		) {
 			// Enqueue styles and scripts
 			self::default_scripts_and_styles();
 
@@ -146,7 +157,10 @@ class Jetpack_Tiled_Gallery {
 		}
 		/**
 		 * Filter the output of the check for another plugin or theme affecting WordPress galleries.
+		 *
 		 * This will let folks that replace core’s shortcode confirm feature parity with it, so Jetpack's Tiled Galleries can still work.
+		 *
+		 * @module tiled-gallery
 		 *
 		 * @since 3.1.0
 		 *
@@ -171,6 +185,8 @@ class Jetpack_Tiled_Gallery {
 
 		/**
 		 * Filter overwriting the default content width.
+		 *
+		 * @module tiled-gallery
 		 *
 		 * @since 2.1.0
 		 *
@@ -198,7 +214,7 @@ class Jetpack_Tiled_Gallery {
 		return $types;
 	}
 
-	function jetpack_default_gallery_type( $default ) {
+	function jetpack_default_gallery_type() {
 		return ( get_option( 'tiled_galleries' ) ? 'rectangular' : 'default' );
 	}
 

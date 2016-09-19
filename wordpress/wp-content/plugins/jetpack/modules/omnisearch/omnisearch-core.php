@@ -39,7 +39,10 @@ class Jetpack_Omnisearch {
 
 		/**
 		 * Fires after each default omnisearch provider has been required.
+		 *
 		 * Can be used to add your own Omnisearch provider.
+		 *
+		 * @module omnisearch
 		 *
 		 * @since 2.3.2
 		 */
@@ -65,7 +68,7 @@ class Jetpack_Omnisearch {
 
 	function jetpack_admin_menu() {
 		remove_submenu_page( 'index.php', 'omnisearch' );
-		$this->slug = add_submenu_page( 'jetpack', __( 'Omnisearch', 'jetpack' ), __( 'Omnisearch', 'jetpack' ), 'edit_posts', 'omnisearch', array( $this, 'omnisearch_page' ) );
+		$this->slug = add_submenu_page( null, __( 'Omnisearch', 'jetpack' ), __( 'Omnisearch', 'jetpack' ), 'edit_posts', 'omnisearch', array( $this, 'omnisearch_page' ) );
 		add_action( "admin_print_styles-{$this->slug}", array( $this, 'admin_print_styles_jetpack' ) );
 	}
 
@@ -90,6 +93,8 @@ class Jetpack_Omnisearch {
 			/**
 			 * Filter the results returned for a given Omnisearch search query.
 			 *
+			 * @module omnisearch
+			 *
 			 * @since 2.3.0
 			 *
 			 * @param array $results Array of Omnisearch results.
@@ -99,6 +104,8 @@ class Jetpack_Omnisearch {
 		}
 		/**
 		 * Filter the number of results displayed for each Omnisearch searched section.
+		 *
+		 * @module omnisearch
 		 *
 		 * @since 2.3.0
 		 *
@@ -139,7 +146,14 @@ class Jetpack_Omnisearch {
 	}
 
 	function admin_bar_search( $wp_admin_bar ) {
-		if( ! is_admin() || ! current_user_can( 'edit_posts' ) )
+		if(
+			! is_admin() ||
+			! current_user_can( 'edit_posts' ) ||
+			(
+				function_exists( 'wpcom_use_wpadmin_flows' ) &&
+				! wpcom_use_wpadmin_flows()
+			)
+		)
 			return;
 
 		$form = self::get_omnisearch_form( array(
@@ -205,6 +219,8 @@ class Jetpack_Omnisearch {
 		<?php
 		/**
 		 * Filters the Omnisearch search form output.
+		 *
+		 * @module omnisearch
 		 *
 		 * @since 2.3.0
 		 *

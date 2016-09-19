@@ -267,9 +267,9 @@ class Jetpack_Network {
 	 * @since 2.9
 	 */
 	public function add_network_admin_menu() {
-		add_menu_page( __( 'Jetpack', 'jetpack' ), __( 'Jetpack', 'jetpack' ), 'manage_network_plugins', 'jetpack', array( $this, 'network_admin_page' ), 'div', 3 );
-		add_submenu_page( 'jetpack', __( 'Jetpack Sites', 'jetpack' ), __( 'Sites', 'jetpack' ), 'manage_sites', 'jetpack', array( $this, 'network_admin_page' ) );
-		add_submenu_page( 'jetpack', __( 'Settings', 'jetpack' ), __( 'Settings', 'jetpack' ), 'manage_network_plugins', 'jetpack-settings', array( $this, 'render_network_admin_settings_page' ) );
+		add_menu_page( __( 'Jetpack', 'jetpack' ), __( 'Jetpack', 'jetpack' ), 'jetpack_network_admin_page', 'jetpack', array( $this, 'network_admin_page' ), 'div', 3 );
+		add_submenu_page( 'jetpack', __( 'Jetpack Sites', 'jetpack' ), __( 'Sites', 'jetpack' ), 'jetpack_network_sites_page', 'jetpack', array( $this, 'network_admin_page' ) );
+		add_submenu_page( 'jetpack', __( 'Settings', 'jetpack' ), __( 'Settings', 'jetpack' ), 'jetpack_network_settings_page', 'jetpack-settings', array( $this, 'render_network_admin_settings_page' ) );
 
 		/**
 		 * As jetpack_register_genericons is by default fired off a hook,
@@ -356,9 +356,9 @@ class Jetpack_Network {
 
 	public function show_jetpack_notice() {
 		if ( isset( $_GET['action'] ) && 'connected' == $_GET['action'] ) {
-			$notice = 'Blog successfully connected';
+			$notice = __( 'Site successfully connected.', 'jetpack' );
 		} else if ( isset( $_GET['action'] ) && 'connection_failed' == $_GET['action'] ) {
-			$notice = 'Blog connection <strong>failed</strong>';
+			$notice = __( 'Site connection <strong>failed</strong>', 'jetpack' );
 		}
 
 		Jetpack::init()->load_view( 'admin/network-admin-alert.php', array( 'notice' => $notice ) );
@@ -392,13 +392,14 @@ class Jetpack_Network {
 			return;
 		}
 
+		if ( Jetpack::is_development_mode() ) {
+			return;
+		}
+
 		$jp = Jetpack::init();
 
 		// Figure out what site we are working on
 		$site_id = ( is_null( $site_id ) ) ? $_GET['site_id'] : $site_id;
-
-		// Build secrets to sent to wpcom for verification
-		$secrets = $jp->generate_secrets();
 
 		// Remote query timeout limit
 		$timeout = $jp->get_remote_query_timeout_limit();
@@ -415,9 +416,11 @@ class Jetpack_Network {
 
 		// Save the secrets in the subsite so when the wpcom server does a pingback it
 		// will be able to validate the connection
-		Jetpack_Options::update_option( 'register',
-			$secrets[0] . ':' . $secrets[1] . ':' . $secrets[2]
-		);
+		$secrets = $jp->generate_secrets( 'register' );
+		@list( $secret_1, $secret_2, $secret_eol ) = explode( ':', $secrets );
+		if ( empty( $secret_1 ) || empty( $secret_2 ) || empty( $secret_eol ) || $secret_eol < time() ) {
+			return new Jetpack_Error( 'missing_secrets' );
+		}
 
 		// Gra info for gmt offset
 		$gmt_offset = get_option( 'gmt_offset' );
@@ -434,7 +437,14 @@ class Jetpack_Network {
 		 */
 		$stat_options = get_option( 'stats_options' );
 		$stat_id = $stat_options = isset( $stats_options['blog_id'] ) ? $stats_options['blog_id'] : null;
+		$user_id = get_current_user_id();
 
+		/**
+		 * Both `state` and `user_id` need to be sent in the request, even though they are the same value.
+		 * Connecting via the network admin combines `register()` and `authorize()` methods into one step,
+		 * because we assume the main site is already authorized. `state` is used to verify the `register()`
+		 * request, while `user_id()` is used to create the token in the `authorize()` request.
+		 */
 		$args = array(
 			'method'  => 'POST',
 			'body'    => array(
@@ -445,12 +455,13 @@ class Jetpack_Network {
 				'gmt_offset'            => $gmt_offset,
 				'timezone_string'       => (string) get_option( 'timezone_string' ),
 				'site_name'             => (string) get_option( 'blogname' ),
-				'secret_1'              => $secrets[0],
-				'secret_2'              => $secrets[1],
+				'secret_1'              => $secret_1,
+				'secret_2'              => $secret_2,
 				'site_lang'             => get_locale(),
 				'timeout'               => $timeout,
 				'stats_id'              => $stat_id, // Is this still required?
-				'user_id'               => get_current_user_id(),
+				'user_id'               => $user_id,
+				'state'                 => $user_id
 			),
 			'headers' => array(
 				'Accept' => 'application/json',
@@ -765,23 +776,23 @@ class Jetpack_Network {
 		}
 
 		if ( isset( $args['public'] ) ) {
-			$query .= $wpdb->prepare( "AND public = %s ", $args['public'] );
+			$query .= $wpdb->prepare( "AND public = %d ", $args['public'] );
 		}
 
 		if ( isset( $args['archived'] ) ) {
-			$query .= $wpdb->prepare( "AND archived = %s ", $args['archived'] );
+			$query .= $wpdb->prepare( "AND archived = %d ", $args['archived'] );
 		}
 
 		if ( isset( $args['mature'] ) ) {
-			$query .= $wpdb->prepare( "AND mature = %s ", $args['mature'] );
+			$query .= $wpdb->prepare( "AND mature = %d ", $args['mature'] );
 		}
 
 		if ( isset( $args['spam'] ) ) {
-			$query .= $wpdb->prepare( "AND spam = %s ", $args['spam'] );
+			$query .= $wpdb->prepare( "AND spam = %d ", $args['spam'] );
 		}
 
 		if ( isset( $args['deleted'] ) ) {
-			$query .= $wpdb->prepare( "AND deleted = %s ", $args['deleted'] );
+			$query .= $wpdb->prepare( "AND deleted = %d ", $args['deleted'] );
 		}
 
 		if ( isset( $args['exclude_blogs'] ) ) {

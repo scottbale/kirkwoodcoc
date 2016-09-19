@@ -9,8 +9,8 @@ abstract class Publicize_Base {
 	public $connected_services = array();
 
 	/**
-	* Sservices that are supported by publicize. They don't
-	* neccessarly need to be connected to the current user.
+	* Services that are supported by publicize. They don't
+	* necessarily need to be connected to the current user.
 	*/
 	public $services;
 
@@ -37,7 +37,7 @@ abstract class Publicize_Base {
 
 	/**
 	 * What WP capability is require to create/delete global connections?
-	 * All users with this cap can unglobalize all other global connections, and globalize any of their own
+	 * All users with this cap can un-globalize all other global connections, and globalize any of their own
 	 * Globalized connections cannot be unselected by users without this capability when publishing
 	 */
 	public $GLOBAL_CAP = 'edit_others_posts';
@@ -49,6 +49,8 @@ abstract class Publicize_Base {
 		$this->default_message = Publicize_Util::build_sprintf( array(
 			/**
 			 * Filter the default Publicize message.
+			 *
+			 * @module publicize
 			 *
 			 * @since 2.0.0
 			 *
@@ -63,6 +65,8 @@ abstract class Publicize_Base {
 			/**
 			 * Filter the message prepended to the Publicize custom message.
 			 *
+			 * @module publicize
+			 *
 			 * @since 2.0.0
 			 *
 			 * @param string $this->default_prefix String prepended to the Publicize custom message.
@@ -75,6 +79,8 @@ abstract class Publicize_Base {
 			/**
 			 * Filter the message appended to the Publicize custom message.
 			 *
+			 * @module publicize
+			 *
 			 * @since 2.0.0
 			 *
 			 * @param string $this->default_suffix String appended to the Publicize custom message.
@@ -85,8 +91,11 @@ abstract class Publicize_Base {
 
 		/**
 		 * Filter the capability to change global Publicize connection options.
-		 * All users with this cap can unglobalize all other global connections, and globalize any of their own
+		 *
+		 * All users with this cap can un-globalize all other global connections, and globalize any of their own
 		 * Globalized connections cannot be unselected by users without this capability when publishing.
+		 *
+		 * @module publicize
 		 *
 		 * @since 2.2.1
 		 *
@@ -95,7 +104,7 @@ abstract class Publicize_Base {
 		$this->GLOBAL_CAP = apply_filters( 'jetpack_publicize_global_connections_cap', $this->GLOBAL_CAP );
 
 		// stage 1 and 2 of 3-stage Publicize. Flag for Publicize on creation, save meta,
-		// then check meta and publicze based on that. stage 3 implemented on wpcom
+		// then check meta and publicize based on that. stage 3 implemented on wpcom
 		add_action( 'transition_post_status', array( $this, 'flag_post_for_publicize' ), 10, 3 );
 		add_action( 'save_post', array( &$this, 'save_meta' ), 20, 2 );
 
@@ -213,7 +222,7 @@ abstract class Publicize_Base {
 		if ( 'tumblr' == $service_name && empty ( $cmeta['connection_data']['meta']['tumblr_base_hostname'] ) )
 			return true;
 
-		// if we have the specific conncetion info..
+		// if we have the specific connection info..
 		if ( isset( $_GET['id'] ) ) {
 			if ( $cmeta['connection_data']['id'] == $_GET['id'] )
 				return true;
@@ -280,6 +289,8 @@ abstract class Publicize_Base {
 			!did_action( 'wp_ajax_instapost_publish' )
 		&&
 			!did_action( 'wp_ajax_post_reblog' )
+		&&
+			!did_action( 'wp_ajax_press-this-save-post' )
 		) {
 			$submit_post = false;
 		}
@@ -317,7 +328,11 @@ abstract class Publicize_Base {
 		}
 
 		// Did this request happen via wp-admin?
-		$from_web = 'post' == strtolower( $_SERVER['REQUEST_METHOD'] ) && isset( $_POST[$this->ADMIN_PAGE] );
+		$from_web = isset( $_SERVER['REQUEST_METHOD'] )
+			&&
+			'post' == strtolower( $_SERVER['REQUEST_METHOD'] ) 
+			&& 
+			isset( $_POST[$this->ADMIN_PAGE] );
 
 		if ( ( $from_web || defined( 'POST_BY_EMAIL' ) ) && isset( $_POST['wpas_title'] ) ) {
 			if ( empty( $_POST['wpas_title'] ) ) {

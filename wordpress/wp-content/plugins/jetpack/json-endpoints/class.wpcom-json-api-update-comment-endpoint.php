@@ -55,6 +55,8 @@ class WPCOM_JSON_API_Update_Comment_Endpoint extends WPCOM_JSON_API_Comment_Endp
 			/**
 			 * Filter allowing non-registered users on the site to comment.
 			 *
+			 * @module json-api
+			 *
 			 * @since 3.4.0
 			 *
 			 * @param bool is_user_member_of_blog() Is the user member of the site.
@@ -166,7 +168,7 @@ class WPCOM_JSON_API_Update_Comment_Endpoint extends WPCOM_JSON_API_Comment_Endp
 		}
 
 		$comment_status = wp_get_comment_status( $comment->comment_ID );
-		if ( $comment_status !== $update['status'] && !current_user_can( 'moderate_comments' ) ) {
+		if ( $comment_status !== $update['comment_status'] && !current_user_can( 'moderate_comments' ) ) {
 			return new WP_Error( 'unauthorized', 'User cannot moderate comments', 403 );
 		}
 

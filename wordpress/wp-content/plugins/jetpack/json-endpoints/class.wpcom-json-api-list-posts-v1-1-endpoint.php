@@ -42,8 +42,7 @@ class WPCOM_JSON_API_List_Posts_v1_1_Endpoint extends WPCOM_JSON_API_Post_v1_1_E
 		}
 
 		// determine statuses
-		$status = $args['status'];
-		$status = ( $status ) ? explode( ',', $status ) : array( 'publish' );
+		$status = ( ! empty( $args['status'] ) ) ? explode( ',', $args['status'] ) : array( 'publish' );
 		if ( is_user_logged_in() ) {
 			$statuses_whitelist = array(
 				'publish',
@@ -116,7 +115,7 @@ class WPCOM_JSON_API_List_Posts_v1_1_Endpoint extends WPCOM_JSON_API_Post_v1_1_E
 
 		if ( isset( $args['meta_key'] ) ) {
 			$show = false;
-			if ( $this->is_metadata_public( $args['meta_key'] ) )
+			if ( WPCOM_JSON_API_Metadata::is_public( $args['meta_key'] ) )
 				$show = true;
 			if ( current_user_can( 'edit_post_meta', $query['post_type'], $args['meta_key'] ) )
 				$show = true;
@@ -297,7 +296,7 @@ class WPCOM_JSON_API_List_Posts_v1_1_Endpoint extends WPCOM_JSON_API_Post_v1_1_E
 				if ( ! is_array( $args['type'] ) ) {
 					$return[$key] = (object) array(
 						'links' => (object) array(
-							'counts' => (string) $this->get_site_link( $blog_id, 'post-counts/' . $args['type'] ),
+							'counts' => (string) $this->links->get_site_link( $blog_id, 'post-counts/' . $args['type'] ),
 						)
 					);
 				}

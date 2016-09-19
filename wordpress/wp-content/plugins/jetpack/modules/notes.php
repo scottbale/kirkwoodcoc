@@ -1,28 +1,17 @@
 <?php
 /**
  * Module Name: Notifications
- * Module Description: Receive notification of site activity via the admin toolbar and your Mobile devices.
+ * Module Description: Receive instant notifications of site comments and likes.
  * Sort Order: 13
  * First Introduced: 1.9
  * Requires Connection: Yes
  * Auto Activate: Yes
  * Module Tags: Other
+ * Feature: General
+ * Additional Search Queries: notification, notifications, toolbar, adminbar, push, comments
  */
 
 if ( !defined( 'JETPACK_NOTES__CACHE_BUSTER' ) ) define( 'JETPACK_NOTES__CACHE_BUSTER', JETPACK__VERSION . '-' . gmdate( 'oW' ) );
-
-Jetpack_Sync::sync_options( __FILE__,
-	'home',
-	'blogname',
-	'siteurl',
-	'permalink_structure',
-	'category_base',
-	'tag_base',
-	'comment_moderation',
-	'default_comment_status',
-	'thread_comments',
-	'thread_comments_depth'
-);
 
 class Jetpack_Notifications {
 	public $jetpack = false;
@@ -100,16 +89,6 @@ class Jetpack_Notifications {
 			}
 		}
 
-		Jetpack_Sync::sync_posts( __FILE__, array(
-			'post_types' => $filt_post_types,
-			'post_stati' => array( 'publish' ),
-		) );
-		Jetpack_Sync::sync_comments( __FILE__, array(
-			'post_types' => $filt_post_types,
-			'post_stati' => array( 'publish' ),
-			'comment_stati' => array( 'approve', 'approved', '1', 'hold', 'unapproved', 'unapprove', '0', 'spam', 'trash' ),
-		) );
-
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX )
 			return;
 
@@ -155,6 +134,21 @@ class Jetpack_Notifications {
 		if ( !is_object( $wp_admin_bar ) )
 			return;
 
+		$wpcom_locale = get_locale();
+
+		if ( !class_exists( 'GP_Locales' ) ) {
+			if ( defined( 'JETPACK__GLOTPRESS_LOCALES_PATH' ) && file_exists( JETPACK__GLOTPRESS_LOCALES_PATH ) ) {
+				require JETPACK__GLOTPRESS_LOCALES_PATH;
+			}
+		}
+
+		if ( class_exists( 'GP_Locales' ) ) {
+			$wpcom_locale_object = GP_Locales::by_field( 'wp_locale', get_locale() );
+			if ( $wpcom_locale_object instanceof GP_Locale ) {
+				$wpcom_locale = $wpcom_locale_object->slug;
+			}
+		}
+
 		$classes = 'wpnt-loading wpn-read';
 		$wp_admin_bar->add_menu( array(
 			'id'     => 'notes',
@@ -162,7 +156,7 @@ class Jetpack_Notifications {
 					<span class="noticon noticon-notification"></span>
 					</span>',
 			'meta'   => array(
-				'html'  => '<div id="wpnt-notes-panel2" style="display:none" lang="'. esc_attr( get_locale() ) . '" dir="' . ( is_rtl() ? 'rtl' : 'ltr' ) . '"><div class="wpnt-notes-panel-header"><span class="wpnt-notes-header">' . __( 'Notifications', 'jetpack' ) . '</span><span class="wpnt-notes-panel-link"></span></div></div>',
+				'html'  => '<div id="wpnt-notes-panel2" style="display:none" lang="'. esc_attr( $wpcom_locale ) . '" dir="' . ( is_rtl() ? 'rtl' : 'ltr' ) . '"><div class="wpnt-notes-panel-header"><span class="wpnt-notes-header">' . __( 'Notifications', 'jetpack' ) . '</span><span class="wpnt-notes-panel-link"></span></div></div>',
 				'class' => 'menupop',
 			),
 			'parent' => 'top-secondary',
