@@ -1,15 +1,28 @@
+# Run me from root directory, e.g. `python bin/export-db.py`
+
+import json
 import requests
 import shutil
 from getpass import getpass
 from contextlib import closing
 
+
 print "Hello, you are about to download a backup of the wordpress website database, for the purposes of archiving or updating the development version of the website. Cool? Let's proceed."
 
-#username = raw_input("Username for hosting provider account: ")
-#print "you entered", username
 
-#password = getpass("Password for hosting provider account:")
-#print "Aha! So your password is '%s', is it?!" % password
+def get_connection_info():
+    default_file = '.secret/live/export-db.json'
+    info_file = raw_input("Enter path to JSON file containing secret connection info data (hit Enter to accept default of '%s'): " % default_file)
+    if not info_file:
+        info_file = default_file
+    print "you entered", info_file
+
+    with open(info_file) as in_f:
+        info = json.load(in_f)
+        print "you loaded connection info '%s'" % info
+        
+    return info
+
 
 def out_rsp(session, response):
     print "\t>>>>>got status code", response.status_code
@@ -18,6 +31,7 @@ def out_rsp(session, response):
     print "\t>>>>>response url", response.url
     #print "session cookies", session.cookies
 
+    
 def slurpbackup(username, password, dbname, auth_url, phpmyadmin_url, export_url):
 
     with requests.session() as s:
@@ -49,7 +63,6 @@ def slurpbackup(username, password, dbname, auth_url, phpmyadmin_url, export_url
                     'hexforbinary':'yes',
                     'sql_type':'insert',
                     'asfile':'sendit',
-                    #'filename_template':'__SERVER__',
                     'filename_template':'__DB__-%F',
                     'compression':'gzip'
                 }
@@ -57,19 +70,25 @@ def slurpbackup(username, password, dbname, auth_url, phpmyadmin_url, export_url
                 with closing(s.post(export_url, data=export_data, stream=True)) as r:
                     out_rsp(s, r)
                     # print 'all headers', r.headers
-                    # fname = 'bar.sql.gz'
                     fname = r.headers['filename'] if 'filename' in r.headers else 'exported.sql.gz'
                     if r.status_code == 200:
                         print "writing to file %s..." % fname
                         with open(fname, 'wb') as f:
                             shutil.copyfileobj(r.raw, f)
-                            # for chunk in r.iter_content(chunk_size=1024):
-                            #     if chunk: # filter out keep-alive new chunks
-                            #         f.write(chunk)
-                
+                    else:
+                        print "phpmyadmin failed to export :("
             else:
                 print "phpmyadmin failed to load :("
         else:
             print "authentication failed :("
 
-slurpbackup('TODO', 'TODO', 'TODO'...)
+            
+c = get_connection_info()
+password = getpass("Password for hosting provider account:")
+slurpbackup(c['username'],
+            password,
+            c['dbname'],
+            c['auth_url'],
+            c['phpmyadmin_url'],
+            c['export_url'])
+

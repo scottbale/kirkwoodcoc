@@ -1,0 +1,7 @@
+{
+    "username": "wordpress username",
+    "dbname": "wordpress database name",
+    "auth_url": "url to authenticate against, e.g. https://secure.foo.com/secureFoo",
+    "phpmyadmin_url": "phpmyadmin url, e.g. https://www.foo.com/controlpanel/MySQL/login.bml?loginname=foo;dbname=bar",
+    "export_url": "phpmyadmin export url, e.g. https://mysqladmin.foo.com/mysqladmin/export.php"
+}
