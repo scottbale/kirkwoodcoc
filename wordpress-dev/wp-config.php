@@ -105,6 +105,8 @@ define('WP_DEBUG', false);
  */
 define( 'DISALLOW_FILE_EDIT', true );
 define( 'FORCE_SSL_ADMIN', true );
+define( 'FS_CHMOD_FILE' , 0755 );
+define( 'FS_CHMOD_DIR' , 0755 );
 
 /* That's all, stop editing! Happy blogging. */
 
