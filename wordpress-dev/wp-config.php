@@ -39,7 +39,7 @@ define('DB_COLLATE', '');
 
 /** uncomment for localhost copy */
 define('WP_HOME','https://'.$_SERVER['HTTP_HOST']);
-define('WP_SITEURL', 'https://'.$_SERVER['HTTP_HOST'].'/wordpress');
+define('WP_SITEURL', 'https://'.$_SERVER['HTTP_HOST'].'/wordpress-dev');
 
 /* if( $_SERVER['HTTPS'] */
 /*   //|| substr_count($_SERVER['SCRIPT_FILENAME'],"wp-admin") > 0  */
