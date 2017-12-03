@@ -182,3 +182,58 @@ public DNS 54.162.165.169
 * upgrade to Wordpress 4.3.1
 * upgrade plugins
 
+## 12/2/17
+
+* upgrade from 4.6.9 to 4.9.1. (Dev is 4.6.1.)
+
+Why does prod `wp-config.php` contain these 2 lines, and dev does not?
+
+    define( 'FS_CHMOD_FILE' , 0755 );
+    define( 'FS_CHMOD_DIR' , 0755 );
+
+### startup
+
+1st attempt:
+
+    Error establishing a database connection
+
+Duh. Forgot to `cp .secret/dev/wp-config.php wordpress/`. Is there a less lame workflow?
+
+### latest db
+
+bunch of WIP stuff in `bin/`
+
+worked on `export-db.py` script
+* data-driven from `export-db.json` file
+* but, script is not working - `export_url` no longer works (returns `401`). Chrome dev tools no help
+
+gave up, manually exported using web interface, `scp`'ed exported db file instead. 
+* exported file was _not_ gzipped *shrug* - looks like https://github.com/phpmyadmin/phpmyadmin/issues/11283
+* phpmyadmin v 2.8.0.1
+* mysql 5.6.37
+* php 4.4.9
+
+https://stackoverflow.com/questions/42385099/1273-unknown-collation-utf8mb4-unicode-520-ci
+
+    Unknown collation: 'utf8mb4_unicode_520_ci'
+    
+replace `utf8mb4_unicode_520_ci` with `utf8mb4_unicode_ci`
+
+Okay, what's the local version of mysql, php?
+
+    yum --showduplicates list mysql
+    5.5-1.6.amzn1
+
+no update available :(
+
+### upgrade to 4.9.1
+
+* see `upgrade.md`
+* looks like no changes to stock `wp-config.php` file this time
+* looked into upgrading jetpack plugin from 4.3.1 to 5.5.x; looks like they require a Wordpress
+  account which we don't have. They no longer offer a way to just download the php files for manual
+  installation. (Looks like time to look for a new way to publish to FB and Twitter.)
+* audio player plugin is ancient, abandoned, and specific to Flash. Need an HTML 5 audio player
+  replacement.
+
+Going with "wpfront notifaction bar" plugin
