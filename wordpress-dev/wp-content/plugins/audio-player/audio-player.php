@@ -552,18 +552,11 @@ if (!class_exists('AudioPlayer')) {
 				}
 			} else {
 				// Not in a feed so return player widget
-				$playerElementID = "audioplayer_" . ++$this->playerID;
-				if (strlen($this->options["flashAlternate"]) > 0) {
-					$playerCode = str_replace(array("%playerID%", "%downloadURL%"), array($playerElementID, $actualFile), $this->options["flashAlternate"]);
-				} else {
-					$playerCode = '<p class="audioplayer_container"><span style="display:block;padding:5px;border:1px solid #dddddd;background:#f8f8f8" id="' . $playerElementID . '">' . sprintf(__('Audio clip: Adobe Flash Player (version 9 or above) is required to play this audio clip. Download the latest version <a href="%s" title="Download Adobe Flash Player">here</a>. You also need to have JavaScript enabled in your browser.', $this->textDomain), 'http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash&amp;promoid=BIOW') . '</span></p>';
-				}
 
-				$playerCode .= '<script type="text/javascript">';
-				//$this->footerCode .= 'AudioPlayer.embed("' . $playerElementID . '", ' . $this->php2js($playerOptions) . ');';
-				//$this->footerCode .= "\n";
-				$playerCode .= 'AudioPlayer.embed("' . $playerElementID . '", ' . $this->php2js($playerOptions) . ');';
-				$playerCode .= '</script>';
+                $playerCode = '<audio controls>';
+                $playerCode .= '<source src="' . $actualFile . '" type="audio/mpeg">';
+                $playerCode .= 'An HTML5-compliant browser is required to play this audio clip.';
+                $playerCode .= '</audio>';
 
 				return $playerCode;
 			}
