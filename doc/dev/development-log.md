@@ -237,3 +237,12 @@ no update available :(
   replacement.
 
 Going with "wpfront notifaction bar" plugin
+
+## 12/9/17
+
+composer - PHP package manager
+packagist - composer's PHP package repository
+Wordpress doesn't have a `composer.json` file - https://github.com/johnpbloch/wordpress is a fork that has one
+http://composer.rarst.net/
+
+hacked the `audio-player` plugin to output HTML5 player element instead of Flash plugin player
