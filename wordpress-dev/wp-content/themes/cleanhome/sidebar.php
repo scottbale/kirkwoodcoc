@@ -10,6 +10,7 @@
             <ul>
         <li class="nolink">9:30 a.m. bible class</li>
         <li class="nolink">10:20 a.m. morning worship</li>
+        <li class="nolink">5:00 p.m. evening worship</li>
             </ul>
             <h4>Wednesday</h4>
             <ul>
